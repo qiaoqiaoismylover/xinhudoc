@@ -140,7 +140,7 @@
 @endsection
 
 @section('script')
-<script src="/res/js/jquery-changeuser.js"></script>
+<script src="/res/plugin/jquery-changeuser.js"></script>
 <script>
 function submitadd(){
 	$.rockvalidate({
