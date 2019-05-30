@@ -21,7 +21,9 @@ Route::get('/base/{act}', 'Base\BaseController@index')->name('base');
 Route::get('/fileview/{cnum}/{filenum}', 'Api\FileoptController@fileview')->name('fileview');
 Route::get('/filedown/{cnum}/{filenum}', 'Api\FileoptController@filedown')->name('filedown');
 Route::get('/fileedit/{cnum}/{filenum}', 'Api\FileoptController@fileedit')->name('fileedit');
+Route::get('/filesend/{cnum}/{filenum}', 'Api\FileoptController@filesend')->name('filesend');
 Route::post('/fileeditcall/{cnum}/{filenum}', 'Api\FileoptController@fileeditcall')->name('fileeditcall');
+Route::get('/fileeditcall/{cnum}/{filenum}', 'Api\FileoptController@fileeditgcall')->name('fileeditgcall');
 
 /**
 *	平台用户路由

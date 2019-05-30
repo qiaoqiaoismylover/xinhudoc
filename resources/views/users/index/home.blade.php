@@ -1,7 +1,7 @@
 <script>
 $(document).ready(function(){
 	
-	var height = viewheight-$('#buttonlist{rand}').height()-90;
+	var height = viewheight-$('#buttonlist{rand}').height()-90,officeview,officeedit;
 	
 	var a = $('#view_{rand}').bootstable({
 		celleditor:false,checked:true,url:js.getapiurl('docfile'),fanye:true,
@@ -67,6 +67,8 @@ $(document).ready(function(){
 		}],
 		load:function(d){
 			fq.show(d);
+			officeview=d.officeview;
+			officeedit=d.officeedit;
 		},
 		itemdblclick:function(d){
 			if(d.type=='1'){
@@ -202,11 +204,19 @@ $(document).ready(function(){
 					js.msgerror(msg);
 				});
 			}else{
-				window.open('/fileview/'+cnum+'/'+jm.base64encode(fnum)+'');
+				if(officeview=='rockoffice'){
+					js.sendeditoffice(jm.base64encode(fnum), 1);
+				}else{
+					window.open('/fileview/'+cnum+'/'+jm.base64encode(fnum)+'');
+				}
 			}
 		},
 		editfile:function(fnum, fna){
-			window.open('/fileedit/'+cnum+'/'+jm.base64encode(fnum)+'');
+			if(officeedit=='rockoffice'){
+				js.sendeditoffice(jm.base64encode(fnum));
+			}else{
+				window.open('/fileedit/'+cnum+'/'+jm.base64encode(fnum)+'');
+			}
 		},
 		downfile:function(fnum, fna){
 			var url = '/filedown/'+cnum+'/'+jm.base64encode(fnum)+'';

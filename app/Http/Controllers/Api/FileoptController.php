@@ -132,6 +132,52 @@ class FileoptController extends ApiauthController
 		if($tplv!='')return view('base.fileview_'.$tplv.'', $barr);
 	}
 	
+	public function filesend($cnum, $filenum, Request $request)
+	{
+		$this->getCompanyId($request, $cnum);
+		if($this->companyid==0)return returnerror('无效访问');
+		
+		$jm  = c('rockjm');
+		$frs = FiledaModel::where('filenum', $jm->base64decode($filenum))->first();
+		if(!$frs)return returnerror('文件记录不存在');
+		$filename = $frs->filename;
+		$fileext  = $frs->fileext;
+		$filepath = $frs->filepath;
+		if(!$frs->fileexists)return returnerror('文件不存在');
+		$lx		    = (int)$request->get('lx');
+		
+		$utes		= 'edit';
+		if($lx==1){
+			$filename = '(只读)'.$filename.'';
+			$utes     = 'yulan';
+		}
+		
+		$saveurl = config('app.url').'/fileeditcall/'.$this->companyinfo->num.'/'.$filenum.'';
+		$saveurl.= '?usertoken='.$this->usertoken.'&useragent='.$this->useragent.'&saveurl=true';
+		
+		$arr	 = array();
+		$arr[0]  = $saveurl; 
+		$arr[1]  = $filename;
+		$arr[2]  = $this->createtempurl($frs);//生成键值
+		$arr[3]  = Rock::replaceurl($filepath); //下载地址
+		$arr[4]  = $frs->id;
+		$arr[5]  = 0;
+		$arr[6]  = 'wu';
+		$arr[7]  = $utes;
+		$arr[8]  = $fileext;
+		
+		$str 	= '';
+		foreach($arr as $s1)$str.=','.$s1.'';
+		
+		return returnsuccess(substr($str,1));
+	}
+	
+	private function createtempurl($frs)
+	{
+		$str = 'rockdoc_'.md5(config('app.url')).'_'.$frs->filesize.'_'.$frs->filenum.'.'.$frs->fileext.'';
+		return $str;
+	}
+	
 	/**
 	*	文件编辑
 	*/
@@ -149,7 +195,7 @@ class FileoptController extends ApiauthController
 		}else{
 			$filename = $frs->filename;
 		}
-		$fileext = $frs->fileext;
+		$fileext  = $frs->fileext;
 		$filepath = $frs->filepath;
 		if(!$frs->fileexists)return $this->returntishi('文件不存在');
 		
@@ -207,6 +253,13 @@ class FileoptController extends ApiauthController
 		if($tplv!='')return view('base.fileedit_'.$tplv.'', $barr);
 	}
 	
+	public function fileeditgcall($cnum, $filenum, Request $request)
+	{
+		$barr = array('error'=>'0');
+		addlogs('验证', 'fileeditee');
+		return "{\"error\":0}";
+	}
+	
 	/**
 	*	在线编辑后保存回调
 	*/
@@ -215,14 +268,22 @@ class FileoptController extends ApiauthController
 		$barr = array('error'=>0);
 		$this->getCompanyId($request, $cnum);
 		if($this->companyid==0)return $this->returntishi('无效访问');
-		
+		$saveurl = $request->get('saveurl');
 		$jm  = c('rockjm');
 		$frs = FiledaModel::where('filenum', $jm->base64decode($filenum))->first();
 		$body_stream = file_get_contents("php://input");
 		
-		addlogs($body_stream, 'fileedit');
-		$data 	= json_decode($body_stream, true);
-		$status = $data['status'];
+		if(isempt($saveurl)){
+			addlogs($body_stream, 'fileedit');
+			$data 	= json_decode($body_stream, true);
+			$status = $data['status'];
+		}else{
+			$filesize = $this->saveeditback($frs, '', $body_stream);//返回文件大小
+			if(!$filesize)return '保存失败了';
+			$frs->filesize = $filesize;
+			$sptph = $this->createtempurl($frs);
+			return 'ok,'.$sptph.'';
+		}
 		
 		//打开时
 		if($status==1){
@@ -232,70 +293,79 @@ class FileoptController extends ApiauthController
 		//保存时回调
 		//http://192.168.130.130:9000/cache/files/dd069b30c9e0894b9a4c_1924/output.xlsx/output.xlsx?md5=dM7tObJpqnxn4Rm63yo5jA==&expires=1558611227&disposition=attachment&ooname=output.xlsx
 		if($status==2){
-			
-			$upobj	 = c('upfile', $this->useainfo);
-			$url 	 = $data['url'];
-			$newpath = ''.config('rock.updir').'/'.date('Y-m').'';
-			if(!is_dir($newpath))mkdir($newpath);
-			$file_ext= '';
-			$newext  = $frs->fileext; //新扩展名，都会呗转为x的格式
+			$this->saveeditback($frs, $data['url']);
+		}
+		
+		return "{\"error\":0}";
+	}
+	
+	private function saveeditback($frs, $url, $data='')
+	{
+		$upobj	 = c('upfile', $this->useainfo);
+		$newpath = ''.config('rock.updir').'/'.date('Y-m').'';
+		if(!is_dir($newpath))mkdir($newpath);
+		$file_ext= '';
+		$newext  = $frs->fileext; //新扩展名，都会呗转为x的格式
+		
+		$randname= ''.date('d_His').''.rand(10,99).'';
+		$filepath= ''.$newpath.'/'.$randname.'.'.$newext.'';
+		if($data==''){
 			if($newext=='xls')$newext = 'xlsx';
 			if($newext=='doc')$newext = 'docx';
 			if($newext=='ppt')$newext = 'pptx';
-			
-			$randname= ''.date('d_His').''.rand(10,99).'';
-			$filepath= ''.$newpath.'/'.$randname.'.'.$newext.'';
 			$cont 	 = @file_get_contents($url);
-			if(!isempt($cont)){
-				$bo 	 = c('base')->createtxt($filepath, $cont);
-				if(!$bo){
-					c('log', $this->useainfo)->adderror('在线编辑','在线编辑文件“'.$frs->filename.'”无法保存到服务器');
-					return;
-				}
-			}else{
-				c('log', $this->useainfo)->adderror('在线编辑','在线编辑文件“'.$frs->filename.'”无法获取文件');
-				return;
-			}
-
-			//备份旧的
-			$oldfilename = $frs->filename;
-			$oldext		 = $upobj->getext($oldfilename, 1);
-			$dtss		 = date('YmdHis', strtotime($frs->adddt));
-			$oldfilename = str_replace('.'.$oldext.'', '(备份'.$dtss.').'.$oldext.'', $oldfilename);
-			$upbarr = $upobj->uploadback(array(
-				'filesize' 	 => $frs->filesize,
-				'filesizecn' => $frs->filesizecn,
-				'fileext' 	 => $frs->fileext,
-				'filetype' 	 => $frs->filetype,
-				'allfilename' => $frs->filepath,
-				'oldfilename' => $oldfilename,
-			),'', array(
-				'pdfpath' => $frs->pdfpath,
-				'oid'	  => $frs->id,
-				'cid'	  => $this->companyid,
-				'uid'	  => $this->userid,
-				'aid'	  => $this->useaid,
-				'adddt'	  => $frs->adddt 
-			));
-			
-			//更新为最新
-			$filesize = filesize($filepath);
-			$filename = $frs->filename;
-			if($newext != $frs->fileext){
-				$filename = str_replace('.'.$oldext.'', '.'.$newext.'', $filename);
-			}
-			$nuarr = array(
-				'fileext'    => $newext,
-				'filepath'   => $filepath,
-				'filename'   => $filename,
-				'filesize' 	 => $filesize,
-				'filesizecn' => $upobj->formatsize($filesize),
-				'optdt' 	 => $this->now,
-			); 
-			\DB::table('fileda')->where('id', $frs->id)->update($nuarr);
+		}else{
+			$cont 	 = base64_decode($data);
 		}
+
+		if(!isempt($cont)){
+			$bo 	 = c('base')->createtxt($filepath, $cont);
+			if(!$bo){
+				c('log', $this->useainfo)->adderror('在线编辑','在线编辑文件“'.$frs->filename.'”无法保存到服务器');
+				return false;
+			}
+		}else{
+			c('log', $this->useainfo)->adderror('在线编辑','在线编辑文件“'.$frs->filename.'”无法获取文件');
+			return false;
+		}
+
+		//备份旧的
+		$oldfilename = $frs->filename;
+		$oldext		 = $upobj->getext($oldfilename, 1);
+		$dtss		 = date('YmdHis', strtotime($frs->adddt));
+		$oldfilename = str_replace('.'.$oldext.'', '(备份'.$dtss.').'.$oldext.'', $oldfilename);
+		$upbarr = $upobj->uploadback(array(
+			'filesize' 	 => $frs->filesize,
+			'filesizecn' => $frs->filesizecn,
+			'fileext' 	 => $frs->fileext,
+			'filetype' 	 => $frs->filetype,
+			'allfilename' => $frs->filepath,
+			'oldfilename' => $oldfilename,
+		),'', array(
+			'pdfpath' => $frs->pdfpath,
+			'oid'	  => $frs->id,
+			'cid'	  => $this->companyid,
+			'uid'	  => $this->userid,
+			'aid'	  => $this->useaid,
+			'adddt'	  => $frs->adddt 
+		));
 		
-		return $barr;
+		//更新为最新
+		$filesize = filesize($filepath);
+		$filename = $frs->filename;
+		if($newext != $frs->fileext){
+			$filename = str_replace('.'.$oldext.'', '.'.$newext.'', $filename);
+		}
+		$nuarr = array(
+			'fileext'    => $newext,
+			'filepath'   => $filepath,
+			'filename'   => $filename,
+			'filesize' 	 => $filesize,
+			'filesizecn' => $upobj->formatsize($filesize),
+			'optdt' 	 => $this->now,
+		); 
+		\DB::table('fileda')->where('id', $frs->id)->update($nuarr);
+		return $filesize;
 	}
 	
 	/**

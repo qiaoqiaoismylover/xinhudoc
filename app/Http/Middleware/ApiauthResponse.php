@@ -95,7 +95,7 @@ class ApiauthResponse
 		//这个一般来自在线编辑提交过来
 		$uageh  = $request->headers->get('Useragent');
 		$ugeth  = $request->input('useragent');
-		if(contain($uageh, 'Node.js') && !isempt($ugeth))$agent = $ugeth;
+		if(!isempt($ugeth))$agent = $ugeth;
 		
 		return [$token, $agent];
 	}

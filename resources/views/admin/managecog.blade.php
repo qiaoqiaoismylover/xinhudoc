@@ -127,6 +127,7 @@
 						  <select class="form-control" id="input_officeview" name="ROCK_OFFICEVIEW">
 						  <option value="">{{ trans('admin/platcog.officeview_microsoft') }}(microsoft)</option>
 						  <option value="rockdoc" @if(env('ROCK_OFFICEVIEW')=='rockdoc')selected @endif>{{ trans('admin/platcog.officeview_rockdoc') }}(rockdoc)</option>
+						  <option value="rockoffice" @if(env('ROCK_OFFICEVIEW')=='rockoffice')selected @endif>{{ trans('admin/platcog.officeview_rockoffice') }}(rockoffice)</option>
 						  <option value="onlyoffice" @if(env('ROCK_OFFICEVIEW')=='onlyoffice')selected @endif>{{ trans('admin/platcog.officeview_onlyoffice') }}(onlyoffice)</option>
 						  <option value="mingdao" @if(env('ROCK_OFFICEVIEW')=='mingdao')selected @endif>{{ trans('admin/platcog.officeview_mingdao') }}(mingdao)</option>
 						  
@@ -139,7 +140,8 @@
 						<div class="col-sm-8">
 						  <select class="form-control" id="input_officeview" name="ROCK_OFFICEDIT">
 						  <option value="">{{ trans('admin/platcog.officeview_onlyoffice') }}(onlyoffice)</option>
-						  <option value="rockdoc" @if(env('ROCK_OFFICEDIT')=='rockdoc')selected @endif>{{ trans('admin/platcog.officeview_rockdoc') }}(rockdoc)</option>  
+						   <option value="rockoffice" @if(env('ROCK_OFFICEDIT')=='rockoffice')selected @endif>{{ trans('admin/platcog.officeview_rockoffice') }}(rockoffice)</option>
+						   <option value="rockdoc" @if(env('ROCK_OFFICEDIT')=='rockdoc')selected @endif>{{ trans('admin/platcog.officeview_rockdoc') }}(rockdoc)</option>  
 						  </select>
 						</div>
 					</div>

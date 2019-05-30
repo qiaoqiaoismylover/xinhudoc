@@ -36,6 +36,7 @@ var config = {
 			'plugins':false,
 			'about':false,
 			'feedback':false,
+			"help": false,
 			"logo": {
                 "image": "{{ $appurl }}/images/platlogo.png",
                 "imageEmbedded": "{{ $appurl }}/images/platlogo.png",

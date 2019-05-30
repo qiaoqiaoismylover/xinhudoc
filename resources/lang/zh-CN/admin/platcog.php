@@ -79,6 +79,7 @@ return [
 	'officeview_mingdao'		=> '使用明道提供在线预览(需在外网上)',
 	'officeview_rockdoc'		=> '信呼官网提供(需在外网上)',
 	'officeview_onlyoffice'		=> '自己安装onlyoffice服务',
+	'officeview_rockoffice'		=> '用户电脑自己安装插件',
 	
 	'onlyoffice'	=> '自己部署onlyoffice服务地址',
 	'onlyoffice_help'	=> '如何部署onlyoffice服务？请看',

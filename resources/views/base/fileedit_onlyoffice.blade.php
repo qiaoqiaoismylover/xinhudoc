@@ -3,6 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>{{ $filename }}</title>
+<script src="/js/jquery.1.9.1.min.js"></script>
 <script type="text/javascript" src="{{ $onlyurl }}/web-apps/apps/api/documents/api.js"></script>
 <script src="/js/base64-min.js"></script>
 </head>
@@ -28,6 +29,7 @@ var config = {
 	"editorConfig": {
 		"mode": "edit",
 		"lang":"zh-CN",
+		"location":"zh-CN",
 		"user":{
 			"name" :"{{ $useainfo->name }}",
 			"id" :"{{ $useainfo->user }}"
@@ -58,12 +60,20 @@ var config = {
 		"callbackUrl": "{{ $callbackUrl }}"+jm.base64decode("{{ $callbackCan }}")+""
 		//"callbackUrl": "https://api.onlyoffice.com/editors/callback"
 		//"callbackUrl": "http://192.168.1.104/call.php"
+		//"callbackUrl": "http://doc.rockoa.com/call.php"
 	},
 	"height": "100%",
-	"width": "100%"
-	
+	"width": "100%",
+	"events": {
+        "onDocumentReady":function(){
+			//var obj = $('iframe')[0];
+			//console.log(obj.src);
+			//console.log('red');
+			//docEditor.denyEditingRights('这个是个提示');
+		}
+    }
 };
-
+//console.log(config.editorConfig.callbackUrl);
 var docEditor = new DocsAPI.DocEditor("placeholder", config);
 </script>
 </body>

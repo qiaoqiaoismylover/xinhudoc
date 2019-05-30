@@ -98,7 +98,7 @@ class ChajianWeapi_docfile extends ChajianWeapi
 						$rs->ishui = 1;
 						$rs->thumbpath = '';
 					}
-					$rs->optdt	 = $frs->adddt;
+					$rs->optdt	 = $frs->optdt;
 				}
 			}
 		}
@@ -133,6 +133,8 @@ class ChajianWeapi_docfile extends ChajianWeapi
 			}
 		}
 		$barr['lujarr'] = $lujarr;
+		$barr['officeview'] = env('ROCK_OFFICEVIEW');
+		$barr['officeedit'] = env('ROCK_OFFICEDIT');
 		
 		return returnsuccess($barr);
 	}

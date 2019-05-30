@@ -871,17 +871,37 @@ function appobj1(act, can1){
 }
 //向PC客户端发送命令
 js.cliendsend=function(at, cans, fun,ferr){
-	var url = unescape('http%3A//127.0.0.1%3A2830/%3Fatype');
+	var dk  = '2829';
+	if(at=='rockoffice')dk='2827';
+	var url = unescape('http%3A//127.0.0.1%3A'+dk+'/%3Fatype');
 	if(!cans)cans={};if(!fun)fun=function(){};if(!ferr)ferr=function(){return false;}
 	url+='='+at+'&callback=?';
+	var llq = navigator.userAgent.toLowerCase();
+	if(llq.indexOf('windows nt 5')>0 && dk=='2829'){
+		if(!ferr())js.msg('msg','XP的系统不支持哦');
+		return;
+	}
 	var i,v,bo=typeof(jm);
 	for(i in cans){
 		v = cans[i];
 		if(bo=='object')v='base64'+jm.base64encode(v)+'';
 		url+='&'+i+'='+v+'';
 	}
-	var timeoout = setTimeout(function(){if(!ferr())js.msg('msg','无法使用,可能没有登录PC客户端');},500);
+	var timeoout = setTimeout(function(){if(!ferr())js.msg('msg','无法使用，可能没有登录REIM客户端');},500);
 	$.getJSON(url, function(ret){clearTimeout(timeoout);fun(ret);});
+}
+
+//发送文档编辑
+js.sendeditoffice=function(id,lx){
+	if(!lx)lx='0';
+	js.loading('加载中...');
+	this.ajax('/filesend/'+cnum+'/'+id+'',{lx:lx},function(ret){
+		if(ret.success){
+			js.cliendsend('rockoffice',{paramsstr:ret.data},false,function(){js.msg('msg','无法使用，可能没有安装在线编辑插件');return true;});
+		}else{
+			js.msg('msg', ret.msg);
+		}
+	});
 }
 
 //开发辅助
@@ -890,39 +910,4 @@ js.openkaifa=function(lx,path){
 	$.getJSON(url, function(ret){
 		if(ret.zt=='err')js.msg('msg','文件不存在：'+ret.path+'');
 	});
-}
-
-//通信
-js.sendmessage=function(evt, lx, data,bfun){
-	var da = '{"atype":"'+lx+'", "data":"'+data+'"}';
-	this.setoption(evt, da);
-	if(bfun)setTimeout(function(){
-		var val=js.getoption(evt);
-		if(val){bfun();js.setoption(evt);}
-	},250);
-}
-js.eventmessage=function(lx,fun){
-	if(!this.eventmessagea){
-		this.eventmessagea={};
-		setInterval('js.eventmessagestart()', 200);
-	}
-	this.setoption(lx);
-	this.eventmessagea[lx]=fun;
-}
-js.eventmessagestart=function(){
-	var lx,fun,da,dats;
-	for(lx in this.eventmessagea){
-		fun = this.eventmessagea[lx];
-		if(!fun)continue;
-		da  = this.getoption(lx);
-		if(da){
-			try{
-				dats = this.decode(da);
-				fun(dats.atype, dats.data);
-			}catch(e){
-				console.error(e)
-			}
-			this.setoption(lx);
-		}
-	}
 }
