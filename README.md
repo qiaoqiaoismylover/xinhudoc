@@ -23,7 +23,9 @@ php artisan rock:docs checkbase //检测数据库是否存在，不存在就创�
 php artisan migrate //导入系统表
 php artisan db:seed //创建后台管理员
 ```
-3、更多安装帮助  http://www.rockoa.com/view_platan.html
+3、更多安装和使用帮助  http://www.rockoa.com/view_platan.html  
+4、总管理后台帐号：admin@rockoa.com，密码：123456，不会使用请看上面地址有帮助视频，总管理后台地址：http://你站点/admin
+
 
 ### 项目介绍 
 1、项目基于Laravel5.4版本开发的。  
