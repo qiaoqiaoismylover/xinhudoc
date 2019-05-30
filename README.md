@@ -10,7 +10,12 @@
 版本整理时间：2019-05-28  
 版本号：V1.0.0  
 
-### 安装方式  
+
+ 
+
+### 安装方式 
+1、建好站点，确保你的站点可以访问，可以到浏览器输入地址能出现logo图片就是可以如：http://你的站点/images/logo.png  
+2、进入系统目录如下命令操作  
 ```php
 composer install
 php -r "file_exists('.env') or copy('.env.example', '.env');" //创建配置文件并修改里面配置参数，如数据库信息
@@ -18,6 +23,7 @@ php artisan rock:docs checkbase //检测数据库是否存在，不存在就创�
 php artisan migrate //导入系统表
 php artisan db:seed //创建后台管理员
 ```
+3、更多安装帮助  http://www.rockoa.com/view_platan.html
 
 ### 项目介绍 
 1、项目基于Laravel5.4版本开发的。  
