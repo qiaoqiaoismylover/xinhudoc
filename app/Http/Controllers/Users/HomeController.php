@@ -57,7 +57,9 @@ class HomeController extends UsersController
 		];
 		
 		//用户类型0,1,2
-		$barr['useatype']	= $useainfo->type;
+		$type 	= $useainfo->type;
+		if($nowcompany->uid==$auth->id)$type = 2; //创建人
+		$barr['useatype']	= $type;
 		$barr['style']		= $this->getBootstyle();
 
         return view('users/index',$barr);

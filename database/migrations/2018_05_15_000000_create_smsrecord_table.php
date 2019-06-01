@@ -24,7 +24,7 @@ class CreateSmsRecordTable extends Migration
         Schema::create($this->tablename, function (Blueprint $table) {
 			$table->comment = '短信记录表';
             $table->increments('id');
-			
+			$table->integer('cid')->default(0)->comment('对应单位ID');
             $table->string('mobile',2000)->default('')->comment('手机号');
             $table->string('cont',200)->default('')->comment('短信内容');
             $table->string('code',20)->nullable()->comment('验证码');

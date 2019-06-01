@@ -15,7 +15,7 @@
 		@if($pid>0)
 		<td style="padding-right:10px"><button onclick="js.back()" type="button" class="btn btn-default">&lt;&lt; {{ trans('base.back') }}</button></td>
 		@endif
-		<td style="padding-right:10px"><button onclick="ondaoru()" type="button" class="btn btn-default">导入默认选项</button></td>
+		<td style="padding-right:10px"><button onclick="ondaoru()" disabled type="button" class="btn btn-default">导入默认选项</button></td>
 		<!--
 		<td>
 			<input class="form-control" style="width:150px" type="text" name="keyword" value="{{ Request::get('keyword') }}" placeholder="{{ trans('base.keyword') }}">

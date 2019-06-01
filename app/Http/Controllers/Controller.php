@@ -97,6 +97,7 @@ class Controller extends BaseController
 		$val = floatval($val);
 		if($val==0 && $lx==0)$val = config('rock.usersstyle');
 		if($val==0 && $lx==1)$val = config('rock.adminstyle');
+		if(\Request::has('style'))$val = (int)\Request::get('style');
 		//$val  = rand(1,34);
 		$stylearr	= c('bootstyle')->getStylearr(1);
 		$zys  		= count($stylearr)-1;

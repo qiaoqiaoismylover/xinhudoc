@@ -18,6 +18,8 @@
 				
 				<li role="presentation"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">{{ trans('manage/cog.createedit') }}</a></li>
 				
+				<li role="presentation"><a href="#tab5" aria-controls="tab5" role="tab" data-toggle="tab">{{ trans('manage/cog.xinhuoa') }}</a></li>
+				
 				<li role="presentation"><a href="#tab4" aria-controls="tab4" role="tab" data-toggle="tab">{{ trans('manage/cog.jieshan') }}</a></li>
 			</ul>
 		  
@@ -196,6 +198,37 @@
 					
 				</div>
 				
+				<div role="tabpanel" class="tab-pane" id="tab5">
+					
+					<div style="margin:20px;max-width:700px">
+						<form name="myformxinhuoa" class="form-horizontal">
+						
+						<div class="form-group" inputname="xinhuoaurl">
+							<label for="input_xinhuoaurl" class="col-sm-3 control-label"> {{ trans('table/company.xinhuoaurl') }}</label>
+							<div class="col-sm-8">
+							  <input class="form-control" data-fields="{{ trans('table/company.xinhuoaurl') }}" placeholder="{{ trans('table/company.xinhuoaurl_msg') }}" value="{{ $xinhuoa['xinhuoaurl'] }}" id="input_xinhuoaurl" name="xinhuoaurl">
+							</div>
+						</div>
+						<div class="form-group" inputname="xinhuoakey">
+							<label for="input_xinhuoakey" class="col-sm-3 control-label">{{ trans('table/company.xinhuoakey') }}</label>
+							<div class="col-sm-8">
+							  <input class="form-control" onblur="this.value=strreplace(this.value)" data-fields="{{ trans('table/company.xinhuoakey') }}" placeholder="{{ trans('table/company.xinhuoakey_msg') }}" value="{{ $xinhuoa['xinhuoakey'] }}" id="input_xinhuoakey" name="xinhuoakey" type="text">
+							</div>
+						</div>
+						
+						
+						<div class="form-group">
+							<div class="col-sm-3"></div>
+							<div class="col-sm-8">
+								<button type="button" name="submitbtn" onclick="savebase('myformxinhuoa','xinhuoa')" class="btn btn-primary">{{ trans('base.savetext') }}</button>
+								<span id="msgview_xinhuoa"></span>
+							</div>
+						</div>
+						</form>
+					</div>
+				
+				</div>
+				
 			</div>	
 		
 		</div >
@@ -208,7 +241,7 @@
 @section('script')
 <script src="/res/plugin/jquery-rockvalidate.js"></script>
 <script src="/base/upfilejs"></script>
-<script src="/res/js/jquery-changeuser.js"></script>
+<script src="/res/plugin/jquery-changeuser.js"></script>
 <script>
 function initbody(){
 	

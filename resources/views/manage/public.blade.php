@@ -46,7 +46,7 @@
 
                    
                     <ul class="nav navbar-nav navbar-right">
-						<li @if($tpl=='manage/cog') class="active" @endif><a href="{{ route('manage', [$cnum,'cog']) }}">{{ trans('manage/public.menu.dwinfo') }}</a></li>
+						<li @if($tpl=='manage/cog') class="active" @endif><a href="{{ route('manage', [$cnum,'cog']) }}">{{ trans('manage/public.menu.cog') }}</a></li>
 						
 						
 						<li class="dropdown">

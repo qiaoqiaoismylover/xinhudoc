@@ -55,4 +55,10 @@ return [
 	
 	'addtext'	=> '新增单位',
     'edittext' 	=> '编辑单位',
+	
+	'xinhuoaurl' 		=> 'OA系统地址',
+    'xinhuoaurl_msg' 	=> 'http开头如：http://demo.rockoa.com/',
+	
+	'xinhuoakey' 		=> 'OA的openkey',
+    'xinhuoakey_msg' 	=> '到OA的【系统→系统工具→系统设置】下对外接口openkey',
 ];

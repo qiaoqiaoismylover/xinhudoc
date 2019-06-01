@@ -19,9 +19,16 @@ class ChajianUnitage_cog extends ChajianUnitage
 	{
 		$udata	= UsersModel::find($this->companyinfo->uid);
 		
+		$obj 	= $this->getNei('option');
+		$xinhuoa= array(
+			'xinhuoaurl' => $obj->getval('xinhuoaurl'),
+			'xinhuoakey' => $obj->getval('xinhuoakey'),
+		);
+		
 		return [
 			'data' => $this->companyinfo,
 			'udata' => $udata,
+			'xinhuoa'=> $xinhuoa
 		];
 	}
 	

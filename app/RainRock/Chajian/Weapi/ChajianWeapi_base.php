@@ -26,9 +26,13 @@ class ChajianWeapi_base extends ChajianWeapi
 		$mobilecode = nulltoempty($request->get('mobilecode'));
 		$gtype  	= $request->get('gtype');
 		$captcha  	= $request->get('captcha');
-		if(!c('check')->iscnmobile($mobile))return returnerror('手机号码格式有误');
 		if(isempt($device) || isempt($gtype))return returnerror('device/gtype不能为空');
 		
+		if($gtype=='bind'){
+			$mobile = nulltoempty($request->get('mobile'));
+		}
+		
+		if(!c('check')->iscnmobile($mobile))return returnerror('手机号码格式有误');
 		if($gtype=='jiesan'){
 			$uinfo 	= UsersModel::where('id', $this->companyinfo->uid)->first();
 			$mobile = $uinfo->mobile;
@@ -38,7 +42,7 @@ class ChajianWeapi_base extends ChajianWeapi
 		//从新绑定手机号
 		if($gtype=='bind'){
 			$to 	= UsersModel::where('mobile', $mobile)->count();
-			if($to>0)return returnerror(trans('users/reg.mobilecz'));
+			if($to>0)return returnerror(trans('users/reg.mobilecz').'we');
 		}
 		
 		//加入单位
@@ -48,7 +52,7 @@ class ChajianWeapi_base extends ChajianWeapi
 			if($to==0)return returnerror(trans('users/reg.regnot'));
 		}
 		
-		return c('rockapi')->sendcode($mobile, $gtype, $device);
+		return c('Rocksms:base')->getcode($mobile, $gtype, $device);
 	}
 	
 	/**

@@ -86,8 +86,8 @@ class ChajianWeapi_company extends ChajianWeapi
 		$mobile		= $ars->mobile;
 		
 		//验证验证码
-		$barr 		= c('rockapi')->checkcode($mobile, $code,'join', $device);
-		if(!$barr['success'])return returnerror($barr['msg']);
+		$barr 		= c('Rocksms:base')->checkcode($mobile, $code,'join', $device);
+		if(!$barr)return returnerror('手机验证码错误');
 		
 		//激活成功
 		$ars->status 	= 1;

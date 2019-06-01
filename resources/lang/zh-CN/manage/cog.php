@@ -14,6 +14,7 @@ return [
 	'emailtitle_msg' 	=> '用来系统发邮件提醒。',
 	'basetab' 	=> '单位信息',
 	'logoedit' 	=> '单位Logo',
+	'xinhuoa' 	=> '关联信呼OA',
 	
 	'createedit' 	=> '单位创建人',
 	'jieshan' 	=> '解散单位',

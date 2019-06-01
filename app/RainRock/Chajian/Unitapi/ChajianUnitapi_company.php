@@ -88,13 +88,13 @@ class ChajianUnitapi_company extends ChajianUnitapi
 		$mobile = $uinfo->mobile;
 		
 		//验证验证码
-		$barr 		= c('rockapi')->checkcode($mobile, $code,'jiesan', $device);
-		if(!$barr['success'])return returnerrors('mobileyzm',$barr['msg']);
+		$bool 		= c('Rocksms:base')->checkcode($mobile, $code,'jiesan', $device);
+		if(!$bool)return returnerrors('mobileyzm','手机验证码错误');
 		
 		$cid 		= $this->companyid;
 		
 		//删除数据
-		$nobeifne 	= explode(',','admin,agent,agentfields,agentmenu,agenttodo,basefileda,basesms,chargems,company,log,migrations,task,queue,token,users');
+		$nobeifne 	= explode(',','admin,chargems,company,log,migrations,task,rockqueue,token,users');
 		$db 		= c('mysql');
 		$qz 		= DB::getTablePrefix();
 		$alltabls 	= $db->getAllTable();
@@ -108,5 +108,20 @@ class ChajianUnitapi_company extends ChajianUnitapi
 		$this->getNei('log')->add('解散单位','单位['.$this->companyinfo->name.']');
 
 		return returnsuccess(['msg'=>'成功解散单位['.$this->companyinfo->name.']']);
+	}
+	
+	
+	public function postxinhuoa($request)
+	{
+		$xinhuoaurl = nulltoempty($request->input('xinhuoaurl'));
+		$xinhuoakey = nulltoempty($request->input('xinhuoakey'));
+		
+		$obj = $this->getNei('option');
+		
+		$obj->setval('xinhuoaurl', $xinhuoaurl,'关联信呼OA地址');
+		$obj->setval('xinhuoakey', $xinhuoakey,'信呼OA的openkey');
+		
+		
+		return returnsuccess();
 	}
 }
