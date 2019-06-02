@@ -109,7 +109,7 @@ class ChajianBase_mysql extends ChajianBase
 		$data = json_decode($cont, true);
 		$qianz= DB::getTablePrefix();
 		foreach($data as $tabe=>$da){
-			$table 	= str_replace('zwoa_', $qianz, $tabe);
+			$table 	= str_replace('rockdoc_', $qianz, $tabe);
 			$fields = $da['fields'];
 			$nowfiel= $this->getfieldsa($table);   
 			$str 	= '';
@@ -117,7 +117,7 @@ class ChajianBase_mysql extends ChajianBase
 			//不存在就创建
 			if(!$nowfiel){
 				$sql 	= $da['createsql'];
-				$sql 	= str_replace('`zwoa_','`'.$qianz.'', $sql);
+				$sql 	= str_replace('`rockdoc_','`'.$qianz.'', $sql);
 			}else{
 				foreach($fields as $k=>$frs){
 					$fname = $frs['name'];

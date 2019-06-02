@@ -14,7 +14,7 @@ $(document).ready(function(){
 			{text:"限制上传类型",dataIndex:"uptype",editor:true,editorattr:'placeholder="为空不限制"'},	
 			{text:"可查看人员",dataIndex:"recename"},{text:"管理人员",dataIndex:"guanname"},
 			{text:"可上传人员",dataIndex:"upuser"},
-			{text:"空间大小(字节)",dataIndex:"size",sortable:true,editor:useatype==1,editorattr:'placeholder="0不限制"',type:'number'},
+			{text:"空间大小(字节)",dataIndex:"size",sortable:true,editor:useatype!=0,editorattr:'placeholder="0不限制"',type:'number'},
 			{
 				text:"空间大小",dataIndex:"sizee",renderer:function(v,d){
 					var str='无限制';

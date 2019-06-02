@@ -23,7 +23,7 @@ return [
 	
 	//信呼官网短信服务
 	'smsxinhu'	=> [
-		'sign'		=> 'rockdoc',	 //默认签名编号，默认签名是：信呼文件平台
-		'codetpl'	=> 'defyzm', 	 //短信验证码模版编号
+		'sign'		=> 'rockdoc',	 //默认签名编号，签名是：信呼OA云平台
+		'codetpl'	=> 'defyzm', //短信验证码模版编号
 	]
 ];

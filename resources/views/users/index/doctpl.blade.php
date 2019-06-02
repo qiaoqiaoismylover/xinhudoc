@@ -55,7 +55,7 @@ $(document).ready(function(){
 				'columns':[{
 					'name' :'filename',labelText:'模版名称',type:'text',required:true,blankText:'请输入模版名称'
 				},{
-					name:'fileext',labelText:'模版类型',type:'select',store:[['docx','doc文档'],['xlsx','Excel表格'],['pptx','PPT放灯片']],valuefields:0,displayfields:1
+					name:'fileext',labelText:'模版类型',type:'select',store:[['docx','Word文档'],['xlsx','Excel表格'],['pptx','PPT放灯片']],valuefields:0,displayfields:1
 				}],
 				saveurl:js.getapiurl('doctpl','savetpl'),
 				onsuccess:function(){

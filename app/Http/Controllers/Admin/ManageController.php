@@ -258,7 +258,7 @@ class ManageController extends AdminController
 	}
 	private function saveData_cog(Request $request)
 	{
-		if(env('APP_ENV')=='demo')
+		if(config('rock.systype')=='demo')
 			return $this->returnerror('官网演示不要去修改');
 		
 		$satst= 'APP_NAME,APP_NAMEADMIN,APP_URL,APP_URLLOCAL,APP_LOGO,APP_DEBUG,APP_OPENREG,ROCK_SMSPROVIDER,APP_ENV,ROCK_RANDKEY,ROCK_URLY,ROCK_XINHUKEY,ALLOW_ORIGIN,ROCK_OFFICEVIEW,ROCK_OFFICEDIT,ROCK_ONLYOFFICE';

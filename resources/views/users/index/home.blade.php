@@ -59,7 +59,7 @@ $(document).ready(function(){
 				}else{
 					var s = '<a role="button" style="TEXT-DECORATION:none" onclick="fq.yulanfile(\''+d.filenum+'\',\''+d.fileext+'\')">预览</a>';
 					if(officelx.indexOf(','+d.fileext+',')>-1 && isguan=='1')s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.editfile(\''+d.filenum+'\',\''+d.fileext+'\')">编辑</a>';
-					if(isguan=='1')s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.downfile(\''+d.filenum+'\',\''+d.fileext+'\')"><i class="icon-arrow-down"></i></a>';
+					s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.downfile(\''+d.filenum+'\',\''+d.fileext+'\')"><i class="icon-arrow-down"></i></a>';
 					return s;
 				}
 			}
@@ -73,7 +73,7 @@ $(document).ready(function(){
 			if(d.type=='1'){
 				fq.openfolder(d.fqid,d.id);
 			}else{
-				fq.yulanfile(d.filenum,d.filename,d.fileext);
+				fq.yulanfile(d.filenum,d.fileext);
 			}
 		}
 	});
