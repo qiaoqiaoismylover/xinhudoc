@@ -24,7 +24,7 @@ class ChajianBase_upfile extends ChajianBase
 	private $jpgallext		= '|jpg|png|gif|bmp|jpeg|';	//图片格式
 	
 	//可上传文件类型，也就是不保存为uptemp的文件
-	private $upallfile		= '|doc|docx|xls|xlsx|ppt|pptx|pdf|swf|rar|zip|txt|gz|wav|ogg|mp3|avi|mp4|flv|wma|chm|apk|amr|log|json|cdr|';
+	private $upallfile		= '|doc|docx|xls|xlsx|ppt|pptx|pdf|swf|rar|zip|txt|gz|wav|ogg|mp3|avi|mp4|flv|wma|chm|apk|amr|log|json|cdr|md|psd|';
 	
 	/**
 		初始化

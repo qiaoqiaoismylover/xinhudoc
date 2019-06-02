@@ -18,7 +18,7 @@ class FileoptController extends ApiauthController
 
 	private function filetypeget()
 	{
-		$opelx= ',txt,log,html,htm,js,php,php3,cs,sql,java,json,css,asp,aspx,shtml,cpp,c,vbs,jsp,xml,bat,sh,';
+		$opelx= ',txt,log,html,htm,js,php,php3,md,cs,sql,java,json,css,asp,aspx,shtml,cpp,c,vbs,jsp,xml,bat,sh,';
 		$offic= ',doc,docx,xls,xlsx,ppt,pptx,';
 		$video= ',mp4,';
 		$audio= ',mp3,ogg,';

@@ -62,7 +62,7 @@ $(document).ready(function(){
 	
 	var c={
 		clickwin:function(o,lx){
-			var store = ['<optgroup label="新建office文件">',['docx','doc文档'],['xlsx','Excel表格'],['pptx','PPT放灯片'],'</optgroup>'];
+			var store = ['<optgroup label="新建office文件">',['docx','Word文档'],['xlsx','Excel表格'],['pptx','PPT放灯片'],'</optgroup>'];
 			if(mtplarr.length>0){
 				store.push('<optgroup label="模版中选择">')
 				for(var i=0;i<mtplarr.length;i++){
