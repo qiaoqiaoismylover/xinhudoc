@@ -7,7 +7,7 @@
     <meta name="google" content="notranslate">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{{ $filename }}</title>
-
+	<link rel="shortcut icon" href="{{ $companyinfo->logo }}" />
 
     <link rel="stylesheet" href="/res/pdfjs/web/viewer.css">
 

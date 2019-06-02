@@ -63,7 +63,8 @@ class FileoptController extends ApiauthController
 		if(!$frs->fileexists)return $this->returntishi('文件不存在');
 		
 		
-		$barr['filename'] = $filename;
+		$barr['filename'] 		= $filename;
+		$barr['companyinfo']  	= $this->companyinfo;
 		$tplv = '';
 		$bople= $this->filetypeget();
 		
@@ -103,7 +104,6 @@ class FileoptController extends ApiauthController
 					$barr['filenum']  = $filenum;
 					$barr['appurl']   = config('app.url');
 					$barr['useainfo']  	  	= $this->useainfo;
-					$barr['companyinfo']  	= $this->companyinfo;
 					$barr['documentType']  	 = $this->getdocumentType($fileext);
 					$barr['viewtype'] = c('base')->ismobile() ? 'mobile' : 'desktop';
 				}
@@ -201,7 +201,8 @@ class FileoptController extends ApiauthController
 		if(!$frs->fileexists)return $this->returntishi('文件不存在');
 		
 		
-		$barr['filename'] = $filename;
+		$barr['filename'] 		= $filename;
+		$barr['companyinfo']  	= $this->companyinfo;
 		$barr['cnum'] 	  = $this->companyinfo->num;
 		$tplv = '';
 		$bople= $this->filetypeget();
@@ -233,7 +234,6 @@ class FileoptController extends ApiauthController
 				$barr['filenum']  = $filenum;
 				$barr['appurl']   = config('app.url');
 				$barr['useainfo']  	  	= $this->useainfo;
-				$barr['companyinfo']  	= $this->companyinfo;
 				$barr['documentType']  	= $this->getdocumentType($fileext);
 				$barr['viewtype'] = c('base')->ismobile() ? 'mobile' : 'desktop';
 				$callbackUrl	  = ''.config('app.urly').'/fileeditcall/'.$barr['cnum'].'/'.$filenum.'';

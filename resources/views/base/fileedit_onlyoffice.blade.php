@@ -3,6 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>{{ $filename }}</title>
+<link rel="shortcut icon" href="{{ $companyinfo->logo }}" />
 <script src="/js/jquery.1.9.1.min.js"></script>
 <script type="text/javascript" src="{{ $onlyurl }}/web-apps/apps/api/documents/api.js"></script>
 <script src="/js/base64-min.js"></script>

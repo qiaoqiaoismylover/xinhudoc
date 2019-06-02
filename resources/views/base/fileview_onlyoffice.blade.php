@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>{{ $filename }}</title>
 <script type="text/javascript" src="{{ $onlyurl }}/web-apps/apps/api/documents/api.js"></script>
-
+<link rel="shortcut icon" href="{{ $companyinfo->logo }}" />
 </head>
 <body style="padding:0px;margin:0px;">
 <div id="placeholder" style="height:100%;width:100%"></div>
