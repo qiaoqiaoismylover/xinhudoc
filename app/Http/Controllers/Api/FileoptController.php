@@ -1,6 +1,6 @@
 <?php
 /**
-*	文件预览删除等
+*	文件预览删除下载等
 *	主页：http://www.rockoa.com/
 *	软件：信呼文件管理平台
 *	作者：雨中磐石(rainrock)
@@ -8,6 +8,7 @@
 */
 
 namespace App\Http\Controllers\Api;
+
 
 use App\Model\Base\FiledaModel;
 use Illuminate\Http\Request;
@@ -210,7 +211,6 @@ class FileoptController extends ApiauthController
 		$opelx= $bople['opelx'];
 		$offic= $bople['offic'];
 		
-		
 		if(contain($opelx,','.$fileext.',')){
 			$tplv 		= 'open';
 			$content  	= file_get_contents($filepath);
@@ -225,9 +225,7 @@ class FileoptController extends ApiauthController
 			$viewqd = $conf['edit'];
 			if(!isset($conf[$viewqd]))return $this->returntishi('没有配置此编辑驱动'.$viewqd.'');
 			$qdconf = $conf[$viewqd];
-			
 			$url 	= Rock::replaceurl($filepath,1);
-			
 			if($viewqd=='onlyoffice'){
 				$tplv 	= $viewqd;
 				$barr['onlyurl']  = $qdconf['url'];
