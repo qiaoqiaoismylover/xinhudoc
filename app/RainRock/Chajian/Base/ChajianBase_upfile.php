@@ -325,7 +325,10 @@ class ChajianBase_upfile extends ChajianBase
 	public function createFileda($barr, $filenum='')
 	{
 		$filepath = $barr['filepath'];
-		$filesize = filesize(public_path($filepath));
+		$filesize = arrvalue($barr, 'filesize', 0);
+		if(substr($filepath, 0, 4)!='http' && file_exists(public_path($filepath))){
+			$filesize = filesize(public_path($filepath));
+		}
 		$filename = $barr['filename'];
 		return $this->uploadback(array(
 			'filesize' 		=> $filesize,

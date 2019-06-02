@@ -280,6 +280,7 @@
 				for(var i=0;i<a.length;i++)if(a[i] && a[i].id)ids+=','+a[i].id+'';
 				if(ids!='')ids=ids.substr(1);
 				try{if(form(this.fileidinput))form(this.fileidinput).value=ids;}catch(e){};
+				this.fileallarr=[];
 				this.allsuccess(this.upbadata, ids);
 				return false;
 			}

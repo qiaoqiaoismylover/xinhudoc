@@ -247,9 +247,14 @@
 					inp = '<textarea placeholder="'+bl+'" '+attr+' name="'+a[i].name+'" class="form-control" style="height:'+a[i].height+'px">'+a[i].value+'</textarea>';
 				}else if(a[i].type=='select'){
 					inp	= '<select name="'+a[i].name+'" class="form-control">';
-					var sto = a[i].store;
+					var sto = a[i].store,d1;
 					for(i1=0;i1<sto.length;i1++){
-						inp+='<option value="'+sto[i1][a[i].valuefields]+'">'+sto[i1][a[i].displayfields]+'</option>';
+						d1 = sto[i1];
+						if(typeof(d1)=='string'){
+							inp+=d1;
+						}else{
+							inp+='<option value="'+d1[a[i].valuefields]+'">'+d1[a[i].displayfields]+'</option>';
+						}
 					}
 					inp += '</select>';
 				}else if(a[i].type=='changeuser'){

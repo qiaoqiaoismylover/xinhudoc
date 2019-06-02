@@ -54,13 +54,12 @@ $(document).ready(function(){
 		},{
 			text:'',dataIndex:'opt',renderer:function(v,d,oi){
 				if(d.ishui=='1')return '已删';
-				var lxs = ',doc,docx,xls,xlsx,ppt,pptx,';
 				if(d.type=='1'){
 					return '<a role="button" style="TEXT-DECORATION:none" onclick="fq.openfolder('+d.fqid+','+d.id+')">打开</a>';
 				}else{
-					var s = '<a role="button" style="TEXT-DECORATION:none" onclick="fq.yulanfile(\''+d.filenum+'\',\''+d.filename+'\',\''+d.fileext+'\')">预览</a>';
-					if(lxs.indexOf(','+d.fileext+',')>-1 && isguan=='1')s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.editfile(\''+d.filenum+'\',\''+d.filename+'\')">编辑</a>';
-					if(isguan=='1')s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.downfile(\''+d.filenum+'\',\''+d.filename+'\')"><i class="icon-arrow-down"></i></a>';
+					var s = '<a role="button" style="TEXT-DECORATION:none" onclick="fq.yulanfile(\''+d.filenum+'\',\''+d.fileext+'\')">预览</a>';
+					if(officelx.indexOf(','+d.fileext+',')>-1 && isguan=='1')s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.editfile(\''+d.filenum+'\',\''+d.fileext+'\')">编辑</a>';
+					if(isguan=='1')s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.downfile(\''+d.filenum+'\',\''+d.fileext+'\')"><i class="icon-arrow-down"></i></a>';
 					return s;
 				}
 			}
@@ -79,6 +78,7 @@ $(document).ready(function(){
 		}
 	});
 	
+	var officelx = ',doc,docx,xls,xlsx,ppt,pptx,';
 	
 	fqarr=[];
 	allfq='0';
@@ -194,7 +194,7 @@ $(document).ready(function(){
 			this.changefenqu(oi, false);
 			this.search(id1,id2);
 		},
-		yulanfile:function(fnum,fna, fext){
+		yulanfile:function(fnum,fext){
 			if(js.isimg(fext)){
 				js.loading('预览初始化中...');
 				js.ajax(js.getapiurl('docfile','getfile'),{'filenum':fnum}, function(ret){
@@ -204,21 +204,21 @@ $(document).ready(function(){
 					js.msgerror(msg);
 				});
 			}else{
-				if(officeview=='rockoffice'){
+				if(officeview=='rockoffice' && officelx.indexOf(','+fext+',')>-1){
 					js.sendeditoffice(jm.base64encode(fnum), 1);
 				}else{
 					window.open('/fileview/'+cnum+'/'+jm.base64encode(fnum)+'');
 				}
 			}
 		},
-		editfile:function(fnum, fna){
-			if(officeedit=='rockoffice'){
+		editfile:function(fnum, fext){
+			if(officeedit=='rockoffice' && officelx.indexOf(','+fext+',')>-1){
 				js.sendeditoffice(jm.base64encode(fnum));
 			}else{
 				window.open('/fileedit/'+cnum+'/'+jm.base64encode(fnum)+'');
 			}
 		},
-		downfile:function(fnum, fna){
+		downfile:function(fnum, fext){
 			var url = '/filedown/'+cnum+'/'+jm.base64encode(fnum)+'';
 			js.location(url);
 		},

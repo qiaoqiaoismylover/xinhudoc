@@ -2,7 +2,7 @@
 $(document).ready(function(){
 	var height = viewheight-$('#buttonlist{rand}').height()-90;
 
-	var atype = 'my';
+	var atype = 'my',mtplarr=[];
 	var a = $('#view_{rand}').bootstable({
 		celleditor:false,url:js.getapiurl('docxie'),fanye:true,params:{'atype':atype},
 		tablename:'d',
@@ -30,11 +30,11 @@ $(document).ready(function(){
 			{text:"状态",dataIndex:"status",sortable:true,editor:true,type:'checkbox'},
 			{
 				text:'',dataIndex:'caozuos',renderer:function(v,d,oi){
-					var s = '<a role="button" style="TEXT-DECORATION:none" onclick="fq.yulanfile(\''+d.filenum+'\',\''+d.filename+'.'+d.fileext+'\',\''+d.fileext+'\')">预览</a>';
+					var s = '<a role="button" style="TEXT-DECORATION:none" onclick="fq.yulanfile(\''+d.filenum+'\',\''+d.fileext+'\')">预览</a>';
 					if(d.xiebool){
-						s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.editfile(\''+d.filenum+'\',\''+d.filename+'.'+d.fileext+'\')">编辑</a>';
+						s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.editfile(\''+d.filenum+'\',\''+d.fileext+'\')">编辑</a>';
 					}
-					s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.downfile(\''+d.filenum+'\',\''+d.filename+'\')"><i class="icon-arrow-down"></i></a>';
+					s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.downfile(\''+d.filenum+'\',\''+d.fileext+'\')"><i class="icon-arrow-down"></i></a>';
 					return s;
 				}
 			}
@@ -48,6 +48,9 @@ $(document).ready(function(){
 		beforeload:function(){
 			get('del_{rand}').disabled=true;
 			get('xuanbtn_{rand}').disabled=true;
+		},
+		load:function(d1){
+			mtplarr = d1.mtplarr;
 		}
 	});
 	
@@ -59,6 +62,14 @@ $(document).ready(function(){
 	
 	var c={
 		clickwin:function(o,lx){
+			var store = ['<optgroup label="新建office文件">',['docx','doc文档'],['xlsx','Excel表格'],['pptx','PPT放灯片'],'</optgroup>'];
+			if(mtplarr.length>0){
+				store.push('<optgroup label="模版中选择">')
+				for(var i=0;i<mtplarr.length;i++){
+					store.push([mtplarr[i].id, mtplarr[i].filename]);
+				}
+				store.push('</optgroup>');
+			}
 			$.rockmodelinput({
 				'title':'新增文档协作',
 				'okbtn':'新增',
@@ -67,7 +78,7 @@ $(document).ready(function(){
 				},{
 					name:'fenlei',labelText:'分类',blankText:'文档分为一类'
 				},{
-					name:'fileext',labelText:'文档类型',type:'select',store:[['docx','doc文档'],['xlsx','Excel表格'],['pptx','PPT放灯片']],valuefields:0,displayfields:1
+					name:'fileext',labelText:'文档类型',type:'select',store:store,valuefields:0,displayfields:1
 				},{
 					name:'explian',labelText:'说明',blankText:'说明这个文档是什么的',type:'textarea'
 				}],

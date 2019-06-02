@@ -32,8 +32,8 @@ $(document).ready(function(){
 		},{
 			text:'',dataIndex:'opt',renderer:function(v,d,oi){
 				if(d.ishui=='1')return '已删';
-				var s = '<a role="button" style="TEXT-DECORATION:none" onclick="fq.yulanfile(\''+d.filenum+'\',\''+d.filename+'\',\''+d.fileext+'\')">预览</a>';
-				s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.downfile(\''+d.filenum+'\',\''+d.filename+'\')"><i class="icon-arrow-down"></i></a>';
+				var s = '<a role="button" style="TEXT-DECORATION:none" onclick="fq.yulanfile(\''+d.filenum+'\',\''+d.fileext+'\')">预览</a>';
+				s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.downfile(\''+d.filenum+'\',\''+d.fileext+'\')"><i class="icon-arrow-down"></i></a>';
 				return s;
 			}
 		}]

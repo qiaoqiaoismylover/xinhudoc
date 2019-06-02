@@ -24,9 +24,9 @@ $(document).ready(function(){
 			{text:"状态",dataIndex:"status",sortable:true,editor:true,type:'checkbox'},
 			{
 				text:'',dataIndex:'caozuos',renderer:function(v,d,oi){
-					var s = '<a role="button" style="TEXT-DECORATION:none" onclick="fq.yulanfile(\''+d.filenum+'\',\''+d.filename+'.'+d.fileext+'\',\''+d.fileext+'\')">预览</a>';
+					var s = '<a role="button" style="TEXT-DECORATION:none" onclick="fq.yulanfile(\''+d.filenum+'\',\''+d.fileext+'\')">预览</a>';
 					if(atype=='my'){
-						s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.editfile(\''+d.filenum+'\',\''+d.filename+'.'+d.fileext+'\')">编辑</a>';
+						s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.editfile(\''+d.filenum+'\',\''+d.fileext+'\')">编辑</a>';
 						s+='&nbsp;<a role="button" onclick="caozuo{rand}('+oi+',this)" style="TEXT-DECORATION:none">共享</a>';
 					}
 					return s;

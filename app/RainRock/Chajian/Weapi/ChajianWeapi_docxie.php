@@ -72,14 +72,24 @@ class ChajianWeapi_docxie extends ChajianWeapi
 			}
 		}
 		$barr['rows'] 		= $rowa;
+		
 		//读取文档模版
+		$mobj	= Agent_doctpl::select('id','filename');
+		$mobj->where('cid', $this->companyid);
+		$mobj->where('status', 1);
+		
+		$wherestr 	= $this->getNei('devdata')->replacesql('{receid,shateid}', false);
+		$wherestr	= '((`aid`='.$this->useaid.') or '.$wherestr.')';
+		$mobj->whereRaw($wherestr);
+		$mobj->orderBy('sort');
+		$barr['mtplarr'] = $mobj->get();
 		
 		
 		return returnsuccess($barr);
 	}
 	
 	/**
-	*	创建模版
+	*	创建协作文档
 	*/
 	public function postsave($req)
 	{
@@ -89,8 +99,26 @@ class ChajianWeapi_docxie extends ChajianWeapi
 		$fileext  = $req->input('fileext');
 		if(isempt($filename))return returnerror('文档名称不能为空');
 		
-		$filepath = c('doc')->createword($fileext,'docxie');
-		$filename = $filename.'.'.$fileext;
+		//从模版中选择
+		$nubool	  = true;
+		if(is_numeric($fileext)){
+			$mrs  = Agent_doctpl::find($fileext);
+			if(!$mrs)return returnerror('文档模版不存在了');
+			$filenum	= $mrs->filenum;
+			$fileext	= $mrs->fileext;
+			$frs 		= FiledaModel::where('filenum', $filenum)->first();
+			if($frs){
+				if($frs->fileexists){
+					$filepath = $frs->filepath;
+					$barr['filesize'] = $frs->filesize;
+					$nubool	  = false;
+				}
+			}
+		}
+		if($nubool){
+			$filepath = c('doc')->createword($fileext,'docxie');
+		}
+		$filename 		  = $filename.'.'.$fileext;
 		
 		$barr['filename'] = $filename;
 		$barr['fileext']  = $fileext;
