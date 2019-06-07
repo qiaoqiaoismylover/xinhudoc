@@ -233,9 +233,9 @@ class FileoptController extends ApiauthController
 				$barr['appurl']   = config('app.url');
 				$barr['useainfo']  	  	= $this->useainfo;
 				$barr['documentType']  	= $this->getdocumentType($fileext);
-				$barr['viewtype'] = c('base')->ismobile() ? 'mobile' : 'desktop';
-				$callbackUrl	  = ''.config('app.urly').'/fileeditcall/'.$barr['cnum'].'/'.$filenum.'';
-				$barr['callbackUrl'] = $callbackUrl;
+				$barr['viewtype'] 	 = c('base')->ismobile() ? 'mobile' : 'desktop';
+				$callbackUrl	  	 = Rock::replaceurl('fileeditcall/'.$barr['cnum'].'/'.$filenum.'',1);
+				$barr['callbackUrl'] = $callbackUrl;//在线编辑回调保存地址
 				$barr['callbackCan'] = $jm->base64encode('?usertoken='.$this->usertoken.'&useragent='.$this->useragent.'');
 			}
 			//用官网的

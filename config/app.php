@@ -73,7 +73,7 @@ return [
 	/**
 	|	系统正式地址
 	*/
-    'urly' => env('APP_URLY', 'http://docs.rockoa.com'),
+    'urly' => env('APP_URLY',''),
 	
 
 	/**

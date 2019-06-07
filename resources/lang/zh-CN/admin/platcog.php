@@ -38,7 +38,10 @@ return [
 	'url_msg'			=> '以http开头，默认自动识别',
 	
 	'urllocal'			=> '平台本地地址',
-	'urllocal_msg'		=> '不知道就不用设置',
+	'urllocal_msg'		=> '以http开头，不知道就不用设置，这个目前没啥用',
+	
+	'appurly'			=> '平台外网地址',
+	'appurly_msg'		=> '以http开头，默认自动识别，不需要设置',
 	
 	'randkey'			=> '系统随机密钥',
 	'randkey_msg'		=> '由26位英文字母组成，不要乱写哦',

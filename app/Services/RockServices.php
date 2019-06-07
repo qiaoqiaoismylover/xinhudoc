@@ -128,8 +128,10 @@ class RockServices
 			$val = str_replace('{baseurl}', config('rock.baseurl').'/', $val);
 		}else{
 			if(substr($val,0,4)!='http'){
-				$url= config('app.url');
+				$url1= config('app.url');
+				$url = '';
 				if($lx==1)$url= config('app.urly');
+				if(!$url)$url = $url1;
 				if(substr($url,-1)!='/' && substr($val,0,1)!='/')$url.='/';
 				$val=''.$url.''.$val.'';
 			}

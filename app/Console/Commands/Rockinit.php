@@ -50,18 +50,52 @@ class Rockinit extends Rockcommandsbase
 	//不存在就创建数据库
 	private function checkbases()
 	{
-		$dbpzt 	= config('database.connections.mysql');
-		$base	= $dbpzt['database'];
+		$dbpzt 		= config('database.connections.mysql');
+		$base		= $dbpzt['database'];
 		$charset	= $dbpzt['charset'];
 		$collation	= $dbpzt['collation'];
 		
-		$allrows	= DB::select('show databases');
-		foreach($allrows as $dors)$allbase[] = $dors->Database;
+		$conn	 = false;
+		$host	 = $dbpzt['host'];
+		if($dbpzt['port']!=3306)$host.=':'.$dbpzt['port'].'';
+		$pdo 	 = false;
+		if(class_exists('mysqli')){
+			$conn = @new \mysqli($host,$dbpzt['username'], $dbpzt['password']);
+			if(mysqli_connect_errno())$conn=false;
+		}
+		if(!$conn && class_exists('PDO')){
+			try {
+				$conn = @new \PDO('mysql:host='.$host.'', $dbpzt['username'], $dbpzt['password']);
+				$pdo  = true;
+			} catch (\PDOException $e) {
+				$conn = false;
+			}
+		}
+		if(!$conn){
+			echo 'DB:mysql host('.$host.'),user('.$dbpzt['username'].'),pass('.$dbpzt['password'].') error';
+			return;
+		}
+		
+		//读取所有数据库
+		$result 	= $conn->query('show databases');
+		$allbase 	= array();
+		if($result){
+			if($pdo){
+				while($row=$result->fetch(\PDO::FETCH_ASSOC)){
+					$allbase[]	= $row['Database'];
+				}
+			}else{
+				while($row=$result->fetch_array(MYSQLI_ASSOC)){
+					$allbase[]	= $row['Database'];
+				}
+			}
+		}
+		
 		if(in_array($base, $allbase)){
 			echo 'database '.$base.' exists';
 		}else{
 			$sql = "CREATE DATABASE `$base` DEFAULT CHARACTER SET $charset COLLATE $collation";
-			DB::select($sql);
+			$conn->query($sql);
 			echo 'database '.$base.' create success';
 		}
 	}

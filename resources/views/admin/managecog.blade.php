@@ -48,6 +48,13 @@
 					</div>
 					
 					<div class="form-group">
+						<label for="input_appurly" class="col-sm-4 control-label"> {{ trans('admin/platcog.appurly') }}(APP_URLY)</label>
+						<div class="col-sm-8">
+						  <input class="form-control" onblur="this.value=strreplace(this.value)" placeholder="{{ trans('admin/platcog.appurly_msg') }}" value="{{ env('APP_URLY') }}"  id="input_appurly" name="APP_URLY">
+						</div>
+					</div>
+					
+					<div class="form-group">
 						<label for="input_urllocal" class="col-sm-4 control-label"> {{ trans('admin/platcog.urllocal') }}(APP_URLLOCAL)</label>
 						<div class="col-sm-8">
 						  <input class="form-control" placeholder="{{ trans('admin/platcog.urllocal_msg') }}" onblur="this.value=strreplace(this.value)" value="{{ env('APP_URLLOCAL') }}"  id="input_urllocal" name="APP_URLLOCAL">
