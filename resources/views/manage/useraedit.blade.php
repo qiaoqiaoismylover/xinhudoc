@@ -115,9 +115,10 @@
 			<div class="form-group" inputname="type">
 				<label for="input_type" class="col-sm-3 control-label">{{ trans('table/usera.type') }}</label>
 				<div class="col-sm-8">
-				  <select class="form-control" @if ($companyinfo->uid==$data->uid) disabled @endif id="input_type" name="type">
+				  <select class="form-control" id="input_type" name="type">
 				  <option value="0">{{ trans('table/usera.type0') }}</option>
 				  <option value="1" @if($data->type==1)selected @endif>{{ trans('table/usera.type1') }}</option>
+				  <option value="2" @if($data->type==2)selected @endif>{{ trans('table/usera.type2') }}</option>
 				  </select>
 				</div>
 			</div>

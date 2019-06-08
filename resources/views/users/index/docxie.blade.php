@@ -25,14 +25,15 @@ $(document).ready(function(){
 			{text:"协作人",dataIndex:"xiename"},
 			{text:"可查看人员",dataIndex:"recename"},
 			{text:"创建人",dataIndex:"optname",sortable:true},
-			{text:"操作时间",dataIndex:"optdt",sortable:true},
+			{text:"修改时间",dataIndex:"optdt",sortable:true},
+			{text:"最后修改",dataIndex:"editname",sortable:true},
 			{text:"说明",dataIndex:"explian",editor:true,type:'textarea'},
 			{text:"状态",dataIndex:"status",sortable:true,editor:true,type:'checkbox'},
 			{
 				text:'',dataIndex:'caozuos',renderer:function(v,d,oi){
 					var s = '<a role="button" style="TEXT-DECORATION:none" onclick="fq.yulanfile(\''+d.filenum+'\',\''+d.fileext+'\')">预览</a>';
 					if(d.xiebool){
-						s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.editfile(\''+d.filenum+'\',\''+d.fileext+'\')">编辑</a>';
+						s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.editfile(\''+d.filenum+'\',\''+d.fileext+'\',\'calleditdocxie\')">编辑</a>';
 					}
 					s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.downfile(\''+d.filenum+'\',\''+d.fileext+'\')"><i class="icon-arrow-down"></i></a>';
 					return s;

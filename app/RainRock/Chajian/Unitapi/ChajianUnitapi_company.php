@@ -63,7 +63,19 @@ class ChajianUnitapi_company extends ChajianUnitapi
 		$urs 	= UsersModel::where('id', $uid)->where('status', 1)->first();
 		if(!$urs)return returnerrors(trans('table/company.editcreatename_err2'));
 		
+		$ars->type = 2; //改成是创建人
+		$ars->save();
+		
+		$ours 	= UsersModel::where('id', $uid)->where('status', 1)->first();
+	
 		$data   = CompanyModel::find($this->companyid);
+		
+		//改成普通的管理员
+		$ours 	= UseraModel::where('cid', $this->companyid)->where('uid', $data->uid)->first();
+		$ours->type = 1;
+		$ours->save();
+		
+		//修改创建人用户ID
 		$data->uid 	= $uid;
 		$data->save();
 		

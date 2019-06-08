@@ -159,7 +159,7 @@ class ChajianWeapi_company extends ChajianWeapi
 		$abj->user		 = c('pingyin')->get($this->userinfo->name);
 		$abj->position	 = '创建人';
 		$abj->status= 1; //我创建是是激活状态
-		$abj->type	= 1; //创建人就是管理员
+		$abj->type	= 2; //创建人就是管理员
 		$abj->uid 	= $this->userid;
 		$abj->name 	= $this->userinfo->name;
 		$abj->mobile= $this->userinfo->mobile;

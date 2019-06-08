@@ -892,10 +892,11 @@ js.cliendsend=function(at, cans, fun,ferr){
 }
 
 //发送文档编辑
-js.sendeditoffice=function(id,lx){
+js.sendeditoffice=function(id,lx,bcal){
 	if(!lx)lx='0';
+	if(!bcal)bcal='';
 	js.loading('加载中...');
-	this.ajax('/filesend/'+cnum+'/'+id+'',{lx:lx},function(ret){
+	this.ajax('/filesend/'+cnum+'/'+id+'',{lx:lx,callb:bcal},function(ret){
 		if(ret.success){
 			js.cliendsend('rockoffice',{paramsstr:ret.data},false,function(){js.msg('msg','无法使用，可能没有安装在线编辑插件');return true;});
 		}else{

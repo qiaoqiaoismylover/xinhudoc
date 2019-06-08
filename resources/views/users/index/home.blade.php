@@ -28,7 +28,10 @@ $(document).ready(function(){
 			}
 		},{
 			text:'大小',dataIndex:'filesize',sortable:true,renderer:function(v,d){
-				if(d.type=='1')v='&nbsp;';
+				if(d.type=='1'){
+					v='&nbsp;';
+					if(d.downshu>0)v='<font color=#aaaaaa>有子目录</font>';
+				}
 				if(d.type=='0')v=js.formatsize(v);
 				return v;
 			}
@@ -41,8 +44,6 @@ $(document).ready(function(){
 			}
 		},{
 			text:'共享给',dataIndex:'shatename'
-		},{
-			text:'下级数',dataIndex:'downshu'
 		},{
 			text:'排序号',dataIndex:'sort',editor:true,sortable:true,editorbefore:function(d){
 				if(isguan=='0'){
@@ -58,7 +59,7 @@ $(document).ready(function(){
 					return '<a role="button" style="TEXT-DECORATION:none" onclick="fq.openfolder('+d.fqid+','+d.id+')">打开</a>';
 				}else{
 					var s = '<a role="button" style="TEXT-DECORATION:none" onclick="fq.yulanfile(\''+d.filenum+'\',\''+d.fileext+'\')">预览</a>';
-					if(officelx.indexOf(','+d.fileext+',')>-1 && isguan=='1')s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.editfile(\''+d.filenum+'\',\''+d.fileext+'\')">编辑</a>';
+					if(officelx.indexOf(','+d.fileext+',')>-1 && isguan=='1')s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.editfile(\''+d.filenum+'\',\''+d.fileext+'\',\'calleditword\')">编辑</a>';
 					s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.downfile(\''+d.filenum+'\',\''+d.fileext+'\')"><i class="icon-arrow-down"></i></a>';
 					return s;
 				}
@@ -211,11 +212,14 @@ $(document).ready(function(){
 				}
 			}
 		},
-		editfile:function(fnum, fext){
+		editfile:function(fnum, fext, callb){
+			if(!callb)callb='';
 			if(officeedit=='rockoffice' && officelx.indexOf(','+fext+',')>-1){
-				js.sendeditoffice(jm.base64encode(fnum));
+				js.sendeditoffice(jm.base64encode(fnum),0, callb);
 			}else{
-				window.open('/fileedit/'+cnum+'/'+jm.base64encode(fnum)+'');
+				var url = '/fileedit/'+cnum+'/'+jm.base64encode(fnum)+'';
+				if(callb)url+='?callb='+callb+'';
+				window.open(url);
 			}
 		},
 		downfile:function(fnum, fext){

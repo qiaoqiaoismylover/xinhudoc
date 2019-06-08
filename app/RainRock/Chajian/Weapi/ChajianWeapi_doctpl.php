@@ -41,12 +41,15 @@ class ChajianWeapi_doctpl extends ChajianWeapi
 		if($atype=='shateall'){
 			$wherestr 	= $this->getNei('devdata')->replacesql('{receid,shateid}', false);
 			$obj->whereRaw($wherestr);
-		}else{
-			if($this->useainfo->type==0)
+		}else if($atype=='guan'){
+			if($this->useainfo->type==0){
 				$obj->where('aid', $this->useaid);
+			}else{
+				
+			}	
+		}else{
+			$obj->where('aid', $this->useaid);
 		}
-		
-		
 		
 		$barr['totalCount'] = $obj->count();
 		

@@ -44,6 +44,9 @@ class CreateAgentWordTable extends Migration
 			
 			$table->datetime('optdt')->nullable()->comment('操作时间');
 			$table->string('optname',20)->default('')->comment('操作人');
+			
+			$table->string('editname',20)->default('')->comment('最后修改人');
+			$table->integer('editnaid')->default(0)->comment('最后修改人id');
 
 			$table->string('shateid',200)->default('')->comment('共享给Id');
 			$table->string('shatename',200)->default('')->comment('共享给');

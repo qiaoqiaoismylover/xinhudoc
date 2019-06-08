@@ -14,6 +14,7 @@ use App\Model\Base\FiledaModel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Testing\MimeType;
 use Rock;
+use DB;
 
 class FileoptController extends ApiauthController
 {
@@ -134,6 +135,9 @@ class FileoptController extends ApiauthController
 		if($tplv!='')return view('base.fileview_'.$tplv.'', $barr);
 	}
 	
+	/**
+	*	获取在线编辑信息，本地插件
+	*/
 	public function filesend($cnum, $filenum, Request $request)
 	{
 		$this->getCompanyId($request, $cnum);
@@ -147,6 +151,7 @@ class FileoptController extends ApiauthController
 		$filepath = $frs->filepath;
 		if(!$frs->fileexists)return returnerror('文件不存在');
 		$lx		    = (int)$request->get('lx');
+		$callb	    = $request->get('callb'); //回调
 		
 		$utes		= 'edit';
 		if($lx==1){
@@ -156,6 +161,7 @@ class FileoptController extends ApiauthController
 		
 		$saveurl = config('app.url').'/fileeditcall/'.$this->companyinfo->num.'/'.$filenum.'';
 		$saveurl.= '?usertoken='.$this->usertoken.'&useragent='.$this->useragent.'&saveurl=true';
+		if(!isempt($callb))$saveurl.='&callb='.$callb.'';
 		
 		$arr	 = array();
 		$arr[0]  = $saveurl; 
@@ -201,7 +207,7 @@ class FileoptController extends ApiauthController
 		$filepath = $frs->filepath;
 		if(!$frs->fileexists)return $this->returntishi('文件不存在');
 		
-		
+		$callb	    			= $request->get('callb'); //回调
 		$barr['filename'] 		= $filename;
 		$barr['companyinfo']  	= $this->companyinfo;
 		$barr['cnum'] 	  = $this->companyinfo->num;
@@ -236,7 +242,10 @@ class FileoptController extends ApiauthController
 				$barr['viewtype'] 	 = c('base')->ismobile() ? 'mobile' : 'desktop';
 				$callbackUrl	  	 = Rock::replaceurl('fileeditcall/'.$barr['cnum'].'/'.$filenum.'',1);
 				$barr['callbackUrl'] = $callbackUrl;//在线编辑回调保存地址
-				$barr['callbackCan'] = $jm->base64encode('?usertoken='.$this->usertoken.'&useragent='.$this->useragent.'');
+				
+				$callcan	= '?usertoken='.$this->usertoken.'&useragent='.$this->useragent.'';
+				if(!isempt($callb))$callcan.='&callb='.$callb.'';
+				$barr['callbackCan'] = $jm->base64encode($callcan);
 			}
 			//用官网的
 			if($viewqd=='rockdoc'){
@@ -268,6 +277,7 @@ class FileoptController extends ApiauthController
 		$this->getCompanyId($request, $cnum);
 		if($this->companyid==0)return $this->returntishi('无效访问');
 		$saveurl = $request->get('saveurl');
+		$callb 	 = $request->get('callb');
 		$jm  = c('rockjm');
 		$frs = FiledaModel::where('filenum', $jm->base64decode($filenum))->first();
 		$body_stream = file_get_contents("php://input");
@@ -277,7 +287,7 @@ class FileoptController extends ApiauthController
 			$data 	= json_decode($body_stream, true);
 			$status = $data['status'];
 		}else{
-			$filesize = $this->saveeditback($frs, '', $body_stream);//返回文件大小
+			$filesize = $this->saveeditback($frs, '', $body_stream, $callb);//返回文件大小
 			if(!$filesize)return '保存失败了';
 			$frs->filesize = $filesize;
 			$sptph = $this->createtempurl($frs);
@@ -292,13 +302,13 @@ class FileoptController extends ApiauthController
 		//保存时回调
 		//http://192.168.130.130:9000/cache/files/dd069b30c9e0894b9a4c_1924/output.xlsx/output.xlsx?md5=dM7tObJpqnxn4Rm63yo5jA==&expires=1558611227&disposition=attachment&ooname=output.xlsx
 		if($status==2){
-			$this->saveeditback($frs, $data['url']);
+			$this->saveeditback($frs, $data['url'],'', $callb);
 		}
 		
 		return "{\"error\":0}";
 	}
 	
-	private function saveeditback($frs, $url, $data='')
+	private function saveeditback($frs, $url, $data='',$callb='')
 	{
 		$upobj	 = c('upfile', $this->useainfo);
 		$newpath = ''.config('rock.updir').'/'.date('Y-m').'';
@@ -363,7 +373,10 @@ class FileoptController extends ApiauthController
 			'filesizecn' => $upobj->formatsize($filesize),
 			'optdt' 	 => $this->now,
 		); 
-		\DB::table('fileda')->where('id', $frs->id)->update($nuarr);
+		DB::table('fileda')->where('id', $frs->id)->update($nuarr);
+		
+		if(!isempt($callb) && method_exists($this, $callb))$this->$callb($frs->filenum, $frs); //回调处理
+		
 		return $filesize;
 	}
 	
@@ -416,5 +429,44 @@ class FileoptController extends ApiauthController
 		header('Expires: 0');
 		header('Content-disposition:attachment;filename='.$filename.'');
 		header('Content-Transfer-Encoding: binary');
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//---------------在线编辑的回调处理------------
+	
+	//文件中心
+	private function calleditword($filenum)
+	{
+		DB::table('word')->where('filenum', $filenum)->update(array(
+			'editname' 	=> $this->useainfo->name,
+			'editnaid' 	=> $this->useaid,
+			'optdt' 	=> $this->now,
+		));
+	}
+	
+	//文档协作
+	private function calleditdocxie($filenum)
+	{
+		DB::table('docxie')->where('filenum', $filenum)->update(array(
+			'editname' 	=> $this->useainfo->name,
+			'editnaid' 	=> $this->useaid,
+			'optdt' 	=> $this->now,
+		));
 	}
 }

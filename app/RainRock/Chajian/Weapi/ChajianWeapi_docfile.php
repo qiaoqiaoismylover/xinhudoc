@@ -83,7 +83,6 @@ class ChajianWeapi_docfile extends ChajianWeapi
 		foreach($rowa as $k=>$rs){	
 			$downshu = 0;
 			if($rs->type==1)$downshu = Agent_word::where('folderid', $rs->id)->count();
-			if($downshu==0)$downshu='';
 			$rs->downshu = $downshu;
 			
 			//关联文件读取，判断是不是存在
@@ -98,7 +97,6 @@ class ChajianWeapi_docfile extends ChajianWeapi
 						$rs->ishui = 1;
 						$rs->thumbpath = '';
 					}
-					$rs->optdt	 = $frs->optdt;
 				}
 			}
 		}

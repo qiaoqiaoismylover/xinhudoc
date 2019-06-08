@@ -25,7 +25,7 @@ $(document).ready(function(){
 			{
 				text:'',dataIndex:'caozuos',renderer:function(v,d,oi){
 					var s = '<a role="button" style="TEXT-DECORATION:none" onclick="fq.yulanfile(\''+d.filenum+'\',\''+d.fileext+'\')">预览</a>';
-					if(atype=='my'){
+					if(atype=='my' || atype=='guan'){
 						s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.editfile(\''+d.filenum+'\',\''+d.fileext+'\')">编辑</a>';
 						s+='&nbsp;<a role="button" onclick="caozuo{rand}('+oi+',this)" style="TEXT-DECORATION:none">共享</a>';
 					}
@@ -34,7 +34,7 @@ $(document).ready(function(){
 			}
 		],
 		itemclick:function(){
-			if(atype=='my')get('del_{rand}').disabled=false;
+			if(atype=='my' || atype=='guan')get('del_{rand}').disabled=false;
 		},
 		beforeload:function(){
 			get('del_{rand}').disabled=true;
@@ -87,7 +87,7 @@ $(document).ready(function(){
 		changlx:function(o1,lx){
 			$("button[id^='state{rand}']").removeClass('active');
 			$('#state{rand}_'+lx+'').addClass('active');
-			var as = ['my','shateall'];
+			var as = ['my','shateall','guan'];
 			a.setCans({celleditor:lx==0});
 			atype  = as[lx];
 			a.setparams({'atype':atype},true);
@@ -95,6 +95,7 @@ $(document).ready(function(){
 	}
 	
 	js.initbtn(c);
+	if(useatype==0)$('#state{rand}_2').remove();
 });
 </script>
 <div id="buttonlist{rand}">
@@ -108,6 +109,7 @@ $(document).ready(function(){
 		<div id="stewwews{rand}" class="btn-group">
 		<button class="btn btn-default active" id="state{rand}_0" click="changlx,0" type="button">我创建的</button>
 		<button class="btn btn-default" id="state{rand}_1" click="changlx,1" type="button">共享给我</button>
+		<button class="btn btn-default" id="state{rand}_2" click="changlx,2" type="button">管理他人模版</button>
 		</div>	
 		
 		</td>

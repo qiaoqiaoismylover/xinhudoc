@@ -81,7 +81,13 @@ class ChajianUnitapi_usera extends ChajianUnitapi
 			return returnerrors('mobile', trans('table/usera.mobile_err'));
 		}
 	
-		if(!isempt($request->type))$data->type = $request->type;//用类型
+		if(!isempt($request->type)){
+			$data->type = $request->type;//用类型
+			if($data->type==2 && $this->companyinfo->uid != $data->uid )
+				return returnerrors('type', trans('table/usera.type2_err'));
+		}
+		
+		
 	
 		//新增时
 		if($id==0){

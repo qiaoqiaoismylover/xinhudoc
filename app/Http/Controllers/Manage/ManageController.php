@@ -71,7 +71,7 @@ class ManageController extends Controller
 		$qx = 0;
 		if($this->companyinfo->uid==$this->userid)$qx = 2;//创建人是超级管理员
 		if($qx != 2){
-			if($this->useainfo->type==1)$qx=1;
+			if($this->useainfo->type>=1)$qx=$this->useainfo->type;
 		}
 		$this->useatype = $qx;
 		if($qx==0 && $bo)return $this->returntishi(trans('validation.notmanage'));
