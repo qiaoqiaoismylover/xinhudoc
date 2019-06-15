@@ -15,9 +15,22 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Testing\MimeType;
 use Rock;
 use DB;
+use Cache;
+use App\Model\Base\BaseModel;
+use App\Model\Base\UseraModel;
+
 
 class FileoptController extends ApiauthController
 {
+	
+	
+	public function __construct()
+    {
+		$this->now= nowdt();
+		$this->jm = c('rockjm');
+		$this->companyinfo			= new \StdClass();
+		$this->useainfo				= new \StdClass();
+    }
 
 	private function filetypeget()
 	{
@@ -43,28 +56,79 @@ class FileoptController extends ApiauthController
 		return $lx;
 	}
 	
+	//外部来的验证
+	public function changekey($request)
+	{
+		$key  = $request->get('key');
+		if(isempt($key))return '无效请求';
+		$barr = Cache::get($key);
+		if(!$barr || !is_array($barr))return '地址已失效了';
+		
+		$useragent	= md5($request->userAgent());
+		if(arrvalue($barr, 'useragent') != $useragent)return '你没有权限访问这个地址';//防止乱分享地址
+
+		$this->companyinfo->logo 		= arrvalue($barr,'logo', '/images/logo.png');
+		$this->companyinfo->name 		= config('app.name');
+		$this->useainfo->deptallname 	= '';
+		$this->useainfo->email = '';
+		$this->useainfo->name  = $this->jm->base64decode($barr['name']);
+		
+		return $barr;
+	}
+	
+	//内部打开验证信息
+	private function changeckey($ckey)
+	{
+		if(isempt($ckey))return '无效请求';
+		if(!$this->jm->isjm($ckey))return '无效请求1';
+		$cknum	= $this->jm->uncrypt($ckey);
+		$aid	= 0;
+		if(contain($cknum,'_')){
+			$stro	= strrpos($cknum, '_');
+			$cnum	= substr($cknum, 0, $stro);
+			$aid	= substr($cknum, $stro+1);
+		}else{
+			$cnum	= $cknum;
+		}
+		
+		$this->companyinfo 	= BaseModel::getCompany($cnum);
+		$this->companyid	= $this->companyinfo->id;
+		if($aid>0){
+			$this->useainfo		= UseraModel::where(array('cid'=>$this->companyid,'id'=>$aid))->first();
+			if($this->useainfo){
+				$this->useaid	= $aid;
+				$this->userid	= $this->useainfo->uid;
+				$this->userinfo	= $this->useainfo->platusers;
+			}
+		}
+	}
+	
 	/**
 	*	预览打开
 	*/
-	public function fileview($cnum, $filenum, Request $request)
+	public function fileview($ckey, $filenum, Request $request)
 	{
-		$this->getCompanyId($request, $cnum);
-		if($this->companyid==0)return $this->returntishi('无效访问');
-		
-		$jm  = c('rockjm');
-		$frs = FiledaModel::where('filenum', $jm->base64decode($filenum))->first();
+		$msga 	= $this->changeckey($ckey);
+		if($msga && is_string($msga))return $this->returntishi($msga);
+		return $this->fileviewshow($filenum, $request);
+	}
+
+	public function afileview($filenum, Request $request)
+	{
+		$msga 	= $this->changekey($request);
+		if($msga && is_string($msga))return $this->returntishi($msga);
+		return $this->fileviewshow($filenum, $request);
+	}
+	
+	private function fileviewshow($filenum)
+	{
+		$frs = FiledaModel::where('filenum', $this->jm->base64decode($filenum))->first();
 		if(!$frs)return $this->returntishi('文件记录不存在');
-		$filename = $request->input('filename');
-		if(!isempt($filename)){
-			$filename = $jm->base64decode($filename);
-		}else{
-			$filename = $frs->filename;
-		}
-		$fileext = $frs->fileext;
+		$filename = $frs->filename;
+		$fileext  = $frs->fileext;
 		$filepath = $frs->filepath;
 		if(!$frs->fileexists)return $this->returntishi('文件不存在');
-		
-		
+	
 		$barr['filename'] 		= $filename;
 		$barr['companyinfo']  	= $this->companyinfo;
 		$tplv = '';
@@ -77,7 +141,7 @@ class FileoptController extends ApiauthController
 		
 		if($fileext=='pdf'){
 			$tplv = 'pdf';
-			$barr['filepath'] = $jm->base64encode('/'.$filepath);
+			$barr['filepath'] = $this->jm->base64encode('/'.$filepath);
 		}else if(contain($opelx,','.$fileext.',')){
 			$tplv 		= 'open';
 			$content  	= file_get_contents($filepath);
@@ -92,6 +156,7 @@ class FileoptController extends ApiauthController
 			if(isempt($pdfpath) || !file_exists(public_path($filepath))){
 				$conf 	= config('rock.fileopt');
 				$viewqd = $conf['view'];
+				
 				if(!isset($conf[$viewqd]))return $this->returntishi('没有配置此预览驱动'.$viewqd.'');
 				$qdconf = $conf[$viewqd];
 				
@@ -105,7 +170,7 @@ class FileoptController extends ApiauthController
 					$barr['onlyurl']  = $qdconf['url'];
 					$barr['filenum']  = $filenum;
 					$barr['appurl']   = config('app.url');
-					$barr['useainfo']  	  	= $this->useainfo;
+					$barr['useainfo']  	  	 = $this->useainfo;
 					$barr['documentType']  	 = $this->getdocumentType($fileext);
 					$barr['viewtype'] = c('base')->ismobile() ? 'mobile' : 'desktop';
 				}
@@ -114,13 +179,14 @@ class FileoptController extends ApiauthController
 				if($viewqd=='rockdoc'){
 					
 				}
+				
 				if($tplv=='')return $this->returntishi('没有开发此预览驱动'.$viewqd.'');
 				
 				$barr['url'] 	= $url;
 				$barr['fileext'] = $fileext;
 			}else{
 				$tplv = 'pdf';
-				$barr['filepath'] = $jm->base64encode('/'.$pdfpath);
+				$barr['filepath'] = $this->jm->base64encode('/'.$pdfpath);
 			}
 		}else if(contain($video,','.$fileext.',')){
 			$tplv 		= 'video';
@@ -136,73 +202,91 @@ class FileoptController extends ApiauthController
 	}
 	
 	/**
-	*	获取在线编辑信息，本地插件
+	*	下载
 	*/
-	public function filesend($cnum, $filenum, Request $request)
+	public function filedown($ckey, $filenum, Request $request)
 	{
-		$this->getCompanyId($request, $cnum);
-		if($this->companyid==0)return returnerror('无效访问');
-		
-		$jm  = c('rockjm');
-		$frs = FiledaModel::where('filenum', $jm->base64decode($filenum))->first();
-		if(!$frs)return returnerror('文件记录不存在');
+		$msga 	= $this->changeckey($ckey);
+		if($msga && is_string($msga))return $this->returntishi($msga);
+		return $this->filedownshow($filenum);
+	}
+	public function afiledown($filenum, Request $request)
+	{
+		$msga 	= $this->changekey($request);
+		if($msga && is_string($msga))return $this->returntishi($msga);
+		return $this->filedownshow($filenum);
+	}
+	private function filedownshow($filenum)
+	{
+		$frs = FiledaModel::where('filenum', $this->jm->base64decode($filenum))->first();
+		if(!$frs)return $this->returntishi('文件记录不存在');
 		$filename = $frs->filename;
 		$fileext  = $frs->fileext;
 		$filepath = $frs->filepath;
-		if(!$frs->fileexists)return returnerror('文件不存在');
-		$lx		    = (int)$request->get('lx');
-		$callb	    = $request->get('callb'); //回调
+		if(!$frs->fileexists)return $this->returntishi('文件不存在');
+	
+		$frs->downci = $frs->downci+1;
+		$frs->save();
+		$filename 	= str_replace(' ','',$filename);
 		
-		$utes		= 'edit';
-		if($lx==1){
-			$filename = '(只读)'.$filename.'';
-			$utes     = 'yulan';
+		$this->fileheader($filename, $fileext, $frs->filesize);
+		if($frs->ishttpout){
+			return redirect($filepath);
+		}else if(substr($filepath,-6)=='uptemp'){
+			$content = base64_decode(file_get_contents($filepath));
+			return $content;
+		}else{
+			ob_clean();
+			flush();
+			readfile($filepath);
 		}
-		
-		$saveurl = config('app.url').'/fileeditcall/'.$this->companyinfo->num.'/'.$filenum.'';
-		$saveurl.= '?usertoken='.$this->usertoken.'&useragent='.$this->useragent.'&saveurl=true';
-		if(!isempt($callb))$saveurl.='&callb='.$callb.'';
-		
-		$arr	 = array();
-		$arr[0]  = $saveurl; 
-		$arr[1]  = $filename;
-		$arr[2]  = $this->createtempurl($frs);//生成键值
-		$arr[3]  = Rock::replaceurl($filepath); //下载地址
-		$arr[4]  = $frs->id;
-		$arr[5]  = 0;
-		$arr[6]  = 'wu';
-		$arr[7]  = $utes;
-		$arr[8]  = $fileext;
-		
-		$str 	= '';
-		foreach($arr as $s1)$str.=','.$s1.'';
-		
-		return returnsuccess(substr($str,1));
+	}
+	private function fileheader($filename,$ext='xls', $size=0)
+	{
+		$mime 		= MimeType::from($filename);
+		header('Content-type:'.$mime.'');
+		header('Accept-Ranges: bytes');
+		if($size>0){
+			Header('Accept-Length:'.$size.'');
+			Header('Content-Length:'.$size.'');
+		}
+		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		header('Pragma: no-cache');
+		header('Expires: 0');
+		header('Content-disposition:attachment;filename='.$filename.'');
+		header('Content-Transfer-Encoding: binary');
 	}
 	
-	private function createtempurl($frs)
-	{
-		$str = 'rockdoc_'.md5(config('app.url')).'_'.$frs->filesize.'_'.$frs->filenum.'.'.$frs->fileext.'';
-		return $str;
-	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	/**
-	*	文件编辑
+	*	编辑
 	*/
-	public function fileedit($cnum, $filenum, Request $request)
+	public function fileedit($ckey, $filenum, Request $request)
 	{
-		$this->getCompanyId($request, $cnum);
-		if($this->companyid==0)return $this->returntishi('无效访问');
+		$msga 	= $this->changeckey($ckey);
+		if($msga && is_string($msga))return $this->returntishi($msga);
+		$curl	= Rock::replaceurl('fileeditcall/'.$ckey.'/'.$filenum.'',1);
 		
-		$jm  = c('rockjm');
-		$frs = FiledaModel::where('filenum', $jm->base64decode($filenum))->first();
+		return $this->fileeditshow($filenum, $curl, $request);
+	}
+	private function fileeditshow($filenum, $callbackUrl, $request)
+	{
+		$frs = FiledaModel::where('filenum', $this->jm->base64decode($filenum))->first();
 		if(!$frs)return $this->returntishi('文件记录不存在');
-		$filename = $request->get('filename');
-		if(!isempt($filename)){
-			$filename = $jm->base64decode($filename);
-		}else{
-			$filename = $frs->filename;
-		}
+		
+		$filename = $frs->filename;
 		$fileext  = $frs->fileext;
 		$filepath = $frs->filepath;
 		if(!$frs->fileexists)return $this->returntishi('文件不存在');
@@ -210,7 +294,6 @@ class FileoptController extends ApiauthController
 		$callb	    			= $request->get('callb'); //回调
 		$barr['filename'] 		= $filename;
 		$barr['companyinfo']  	= $this->companyinfo;
-		$barr['cnum'] 	  = $this->companyinfo->num;
 		$tplv = '';
 		$bople= $this->filetypeget();
 		
@@ -240,12 +323,10 @@ class FileoptController extends ApiauthController
 				$barr['useainfo']  	  	= $this->useainfo;
 				$barr['documentType']  	= $this->getdocumentType($fileext);
 				$barr['viewtype'] 	 = c('base')->ismobile() ? 'mobile' : 'desktop';
-				$callbackUrl	  	 = Rock::replaceurl('fileeditcall/'.$barr['cnum'].'/'.$filenum.'',1);
-				$barr['callbackUrl'] = $callbackUrl;//在线编辑回调保存地址
 				
-				$callcan	= '?usertoken='.$this->usertoken.'&useragent='.$this->useragent.'';
-				if(!isempt($callb))$callcan.='&callb='.$callb.'';
-				$barr['callbackCan'] = $jm->base64encode($callcan);
+
+				if(!isempt($callbackUrl))$callbackUrl.='?callb='.$callb.'';
+				$barr['callbackUrl'] = $callbackUrl;//在线编辑回调保存地址
 			}
 			//用官网的
 			if($viewqd=='rockdoc'){
@@ -261,32 +342,23 @@ class FileoptController extends ApiauthController
 		if($tplv!='')return view('base.fileedit_'.$tplv.'', $barr);
 	}
 	
-	public function fileeditgcall($cnum, $filenum, Request $request)
+	public function fileeditcall($ckey, $filenum, Request $request)
 	{
-		$barr = array('error'=>'0');
-		addlogs('验证', 'fileeditee');
-		return "{\"error\":0}";
-	}
-	
-	/**
-	*	在线编辑后保存回调
-	*/
-	public function fileeditcall($cnum, $filenum, Request $request)
-	{
-		$barr = array('error'=>0);
-		$this->getCompanyId($request, $cnum);
-		if($this->companyid==0)return $this->returntishi('无效访问');
+		$msga 	= $this->changeckey($ckey);
+		if($msga && is_string($msga))return $msga;
+		
+		
 		$saveurl = $request->get('saveurl');
 		$callb 	 = $request->get('callb');
-		$jm  = c('rockjm');
-		$frs = FiledaModel::where('filenum', $jm->base64decode($filenum))->first();
+		$frs 	 = FiledaModel::where('filenum', $this->jm->base64decode($filenum))->first();
 		$body_stream = file_get_contents("php://input");
 		
 		if(isempt($saveurl)){
-			addlogs($body_stream, 'fileedit');
+			addlogs($body_stream, 'fileedit_new');
 			$data 	= json_decode($body_stream, true);
 			$status = $data['status'];
 		}else{
+			
 			$filesize = $this->saveeditback($frs, '', $body_stream, $callb);//返回文件大小
 			if(!$filesize)return '保存失败了';
 			$frs->filesize = $filesize;
@@ -307,6 +379,13 @@ class FileoptController extends ApiauthController
 		
 		return "{\"error\":0}";
 	}
+	
+	private function createtempurl($frs)
+	{
+		$str = 'rockdoc_'.md5(config('app.url')).'_'.$frs->filesize.'_'.$frs->filenum.'.'.$frs->fileext.'';
+		return $str;
+	}
+	
 	
 	private function saveeditback($frs, $url, $data='',$callb='')
 	{
@@ -356,6 +435,7 @@ class FileoptController extends ApiauthController
 			'cid'	  => $this->companyid,
 			'uid'	  => $this->userid,
 			'aid'	  => $this->useaid,
+			'optname' => $this->useainfo->name,
 			'adddt'	  => $frs->adddt 
 		));
 		
@@ -371,7 +451,7 @@ class FileoptController extends ApiauthController
 			'filename'   => $filename,
 			'filesize' 	 => $filesize,
 			'filesizecn' => $upobj->formatsize($filesize),
-			'optdt' 	 => $this->now,
+			'optdt' 	 => nowdt(),
 		); 
 		DB::table('fileda')->where('id', $frs->id)->update($nuarr);
 		
@@ -380,71 +460,52 @@ class FileoptController extends ApiauthController
 		return $filesize;
 	}
 	
+	
 	/**
-	*	下载
+	*	获取在线编辑信息，本地插件
 	*/
-	public function filedown($cnum, $filenum, Request $request)
+	public function filesend($ckey, $filenum, Request $request)
 	{
-		$this->getCompanyId($request, $cnum);
-		if($this->companyid==0)return $this->returntishi('无效访问');
+		$msga 	= $this->changeckey($ckey);
+		if($msga && is_string($msga))return returnerror($msga);
 		
-		$jm  = c('rockjm');
-		$frs = FiledaModel::where('filenum', $jm->base64decode($filenum))->first();
-		if(!$frs)return $this->returntishi('文件记录不存在');
-		$filename = $request->input('filename');
-		if(!isempt($filename)){
-			$filename = $jm->base64decode($filename);
-		}else{
-			$filename = $frs->filename;
-		}
+		$frs = FiledaModel::where('filenum', $this->jm->base64decode($filenum))->first();
+		if(!$frs)return returnerror('文件记录不存在');
 		$filename = $frs->filename;
 		$fileext  = $frs->fileext;
 		$filepath = $frs->filepath;
-		if(!$frs->fileexists)return $this->returntishi('文件不存在');
-
-		$frs->downci = $frs->downci+1;
-		$frs->save();
+		if(!$frs->fileexists)return returnerror('文件不存在');
+		$lx		    = (int)$request->get('lx');
+		$callb	    = $request->get('callb'); //回调
 		
-		$filename 	= str_replace(' ','',$filename);
-		if($frs->ishttpout){
-			$this->fileheader($filename, $fileext);
-			return redirect($filepath);
-		}else if(substr($filepath,-6)=='uptemp'){
-			$content = base64_decode(file_get_contents($filepath));
-			$this->fileheader($filename, $fileext);
-			return $content;
-		}else{
-			return response()->download($filepath, $filename);
+		$utes		= 'edit';
+		if($lx==1){
+			$filename = '(只读)'.$filename.'';
+			$utes     = 'yulan';
 		}
+		
+		
+		$ckey	 = $this->jm->encrypt(''.$this->companyinfo->num.'_'.$this->useaid.'');
+		$saveurl = config('app.url').'/fileeditcall/'.$ckey.'/'.$filenum.'';
+		$saveurl.= '?saveurl=true';
+		if(!isempt($callb))$saveurl.='&callb='.$callb.'';
+		
+		$arr	 = array();
+		$arr[0]  = $saveurl; 
+		$arr[1]  = $filename;
+		$arr[2]  = $this->createtempurl($frs);//生成键值
+		$arr[3]  = Rock::replaceurl($filepath); //下载地址
+		$arr[4]  = $frs->id;
+		$arr[5]  = 0;
+		$arr[6]  = 'wu';
+		$arr[7]  = $utes;
+		$arr[8]  = $fileext;
+		
+		$str 	= '';
+		foreach($arr as $s1)$str.=','.$s1.'';
+		
+		return returnsuccess(substr($str,1));
 	}
-	
-	
-	private function fileheader($filename,$ext='xls')
-	{
-		$mime 		= MimeType::from($filename);
-		header('Content-type:'.$mime.'');
-		header('Accept-Ranges: bytes');
-		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		header('Pragma: no-cache');
-		header('Expires: 0');
-		header('Content-disposition:attachment;filename='.$filename.'');
-		header('Content-Transfer-Encoding: binary');
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
@@ -456,7 +517,7 @@ class FileoptController extends ApiauthController
 		DB::table('word')->where('filenum', $filenum)->update(array(
 			'editname' 	=> $this->useainfo->name,
 			'editnaid' 	=> $this->useaid,
-			'optdt' 	=> $this->now,
+			'optdt' 	=> nowdt(),
 		));
 	}
 	
@@ -466,7 +527,7 @@ class FileoptController extends ApiauthController
 		DB::table('docxie')->where('filenum', $filenum)->update(array(
 			'editname' 	=> $this->useainfo->name,
 			'editnaid' 	=> $this->useaid,
-			'optdt' 	=> $this->now,
+			'optdt' 	=> nowdt(),
 		));
 	}
 }

@@ -31,11 +31,11 @@ $(document).ready(function(){
 			{text:"状态",dataIndex:"status",sortable:true,editor:true,type:'checkbox'},
 			{
 				text:'',dataIndex:'caozuos',renderer:function(v,d,oi){
-					var s = '<a role="button" style="TEXT-DECORATION:none" onclick="fq.yulanfile(\''+d.filenum+'\',\''+d.fileext+'\')">预览</a>';
+					var s = '<a role="button" title="预览"  style="TEXT-DECORATION:none" onclick="fq.yulanfile(\''+d.filenum+'\',\''+d.fileext+'\')">预览</a>';
 					if(d.xiebool){
-						s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.editfile(\''+d.filenum+'\',\''+d.fileext+'\',\'calleditdocxie\')">编辑</a>';
+						s+='&nbsp;<a role="button" title="编辑" style="TEXT-DECORATION:none" onclick="fq.editfile(\''+d.filenum+'\',\''+d.fileext+'\',\'calleditdocxie\')">编辑</a>';
 					}
-					s+='&nbsp;<a role="button" style="TEXT-DECORATION:none" onclick="fq.downfile(\''+d.filenum+'\',\''+d.fileext+'\')"><i class="icon-arrow-down"></i></a>';
+					s+='&nbsp;<a role="button" title="下载" style="TEXT-DECORATION:none" onclick="fq.downfile(\''+d.filenum+'\',\''+d.fileext+'\')"><i class="icon-arrow-down"></i></a>';
 					return s;
 				}
 			}
@@ -52,6 +52,9 @@ $(document).ready(function(){
 		},
 		load:function(d1){
 			mtplarr = d1.mtplarr;
+		},
+		itemdblclick:function(d){
+			//fq.yulanfile(d.filenum, d.fileext);
 		}
 	});
 	

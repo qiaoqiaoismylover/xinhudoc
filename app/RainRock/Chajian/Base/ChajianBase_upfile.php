@@ -34,6 +34,7 @@ class ChajianBase_upfile extends ChajianBase
 	*/
 	public function initupfile($ext,$path,$maxsize=0)
 	{
+		if(isempt($ext))$ext  = '*';
 		if($ext=='image')$ext = $this->jpgallext;
 		$this->ext		= $ext;
 		if($maxsize==0)$maxsize = $this->getmaxzhao();
@@ -291,14 +292,30 @@ class ChajianBase_upfile extends ChajianBase
 		
 		
 		$baseobj	= c('base');
-		$barr['filenum'] 	= c('mysql')->ranknum('fileda','filenum', 8);//8位数不重复随机数
 		$barr['adddt']		= $this->now;
 		$barr['optdt']		= $this->now;
 		$barr['ip']			= $baseobj->getclientip();
 		$barr['web']		= $baseobj->getbrowser();
 		
 		foreach($oarr as $k=>$v)$barr[$k] = $v;
-		$barr['id']			= DB::table('fileda')->insertGetId($barr);
+		
+		$filenum 			= arrvalue($barr, 'filenum');
+		$filenumold 		= arrvalue($barr, 'filenum');
+		if(isempt($filenum))$filenum = c('mysql')->ranknum('fileda','filenum', 8);//8位数不重复随机数
+		$barr['filenum']	= $filenum;
+		$addbo				= true;
+		
+		//更新
+		if(!isempt($filenumold)){
+			$oldfrs	= FiledaModel::where('filenum', $filenumold)->first();
+			if($oldfrs){
+				$barr['id'] = $oldfrs->id;
+				DB::table('fileda')->where('filenum', $filenumold)->update($barr);
+				$addbo = false;
+			}
+		}
+		
+		if($addbo)$barr['id']	= DB::table('fileda')->insertGetId($barr);
 		
 		if(isset($uparr['pich'])){
 			$barr['height'] 	= $uparr['pich'];
@@ -314,6 +331,8 @@ class ChajianBase_upfile extends ChajianBase
 		$barr['viewpath']	= $url.'/'.$barr['filepath'];//原图
 		$barr['viewpats']	= $url.'/'.$barr['thumbpath'];
 		
+		
+		
 		//如果是用第三方存储上传到第三方
 		
 		return $barr;
@@ -322,7 +341,7 @@ class ChajianBase_upfile extends ChajianBase
 	/**
 	*	保存文件
 	*/
-	public function createFileda($barr, $filenum='')
+	public function createFileda($barr)
 	{
 		$filepath = $barr['filepath'];
 		$filesize = arrvalue($barr, 'filesize', 0);
@@ -369,5 +388,19 @@ class ChajianBase_upfile extends ChajianBase
 			$dowar = FiledaModel::where('oid', $frs->id)->get();
 			foreach($dowar as $k1=>$rs1)$this->delfile($rs1->filenum);
 		}
+	}
+	
+	public function getupdir($updir, $lx='|')
+	{
+		if(isempt($updir)){
+			$updir=date('Y-m');
+		}else{
+			$updir=str_replace(array(' ','.'),'', trim($updir));
+			$updir=str_replace('{month}',date('Y-m'), $updir);
+			$updir=str_replace('{Year}',date('Y'), $updir);
+			$updir=str_replace(array('{','}'),'', $updir);
+			$updir=str_replace(',',$lx, $updir);
+		}
+		return ''.config('rock.updir').''.$lx.''.$updir.'';
 	}
 }

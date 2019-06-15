@@ -32,14 +32,12 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            //\App\Http\Middleware\VerifyCsrfToken::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            'shareerrors',
+            'bindings',
         ],
 		
 		'webapi' => [
-			\Illuminate\Routing\Middleware\SubstituteBindings::class,
-			\Illuminate\View\Middleware\ShareErrorsFromSession::class,
+			'shareerrors',
             'bindings',
 			'json'
         ],
@@ -48,6 +46,12 @@ class Kernel extends HttpKernel
             'throttle:60,1', //请求次数，1分钟60次
             'bindings',
 			'json'
+        ],
+		
+		'openapi' => [
+            'shareerrors',
+            'bindings',
+            'openapicheck',
         ],
     ];
 
@@ -59,13 +63,16 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'json' 	=> \App\Http\Middleware\JsonResponse::class,
+        'shareerrors' 	=> \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+        'json' 		=> \App\Http\Middleware\JsonResponse::class,
         'apiauth' 	=> \App\Http\Middleware\ApiauthResponse::class,
-        'auth' 	=> \Illuminate\Auth\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'openapicheck' 	=> \App\Http\Middleware\OpenApiResponse::class,
+        'auth' 		=> \Illuminate\Auth\Middleware\Authenticate::class,
+        'auth.basic'=> \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' 	=> \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' 		=> \Illuminate\Auth\Middleware\Authorize::class,
         'guest' 	=> \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' 	=> \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'csrftoken' => \App\Http\Middleware\VerifyCsrfToken::class,
     ];
 }

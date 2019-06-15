@@ -49,6 +49,9 @@ class CreateAgentWorcTable extends Migration
 			$table->bigInteger('size')->default(0)->comment('分配大小0不限制单位字节');
 			$table->bigInteger('sizeu')->default(0)->comment('已使用大小字节');
 			$table->integer('sort')->default(0)->comment('排序号');
+			
+			$table->tinyInteger('isdel')->default(0)->comment('是否可删除');
+			$table->tinyInteger('isdown')->default(0)->comment('是否可下载');
  
 			$table->index('cid');
 			$table->index('aid');

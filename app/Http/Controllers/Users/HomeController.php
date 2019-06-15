@@ -61,6 +61,7 @@ class HomeController extends UsersController
 		if($nowcompany->uid==$auth->id)$type = 2; //创建人
 		$barr['useatype']	= $type;
 		$barr['style']		= $this->getBootstyle();
+		$barr['show_key']	= c('rockjm')->getkeyshow();
 
         return view('users/index',$barr);
     }

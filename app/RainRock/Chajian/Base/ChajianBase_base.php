@@ -75,12 +75,13 @@ class ChajianBase_base extends ChajianBase
 	/**
 	*	创建文件夹
 	*/
-	public function createdir($path, $oi=1, $luj='')
+	public function createdir($path, $oi=1, $luj=0)
 	{
 		$zpath	= explode('/', $path);
 		$len    = count($zpath);
 		$mkdir	= '';
-		if($luj=='')$luj = base_path();
+		if($luj==0)$luj = base_path();
+		if($luj==1)$luj = public_path();
 		$luj  	= str_replace('\\','/', $luj);
 		for($i=0; $i<$len-$oi; $i++){
 			if(!isempt($zpath[$i])){
@@ -144,7 +145,7 @@ class ChajianBase_base extends ChajianBase
 	*/
 	public function createtxt($path, $txt)
 	{
-		$this->createdir($path, 1, public_path());
+		$this->createdir($path, 1, 1);
 		$path	= public_path($path);
 		$path	= str_replace('\\','/', $path);
 		@$file	= fopen($path,'w');

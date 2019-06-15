@@ -13,5 +13,10 @@ use App\RainRock\Chajian\Chajian;
 
 class ChajianAdminapi extends Chajian
 {
+	public $admininfo;
 	
+	public function setAdminInfo($info)
+	{
+		$this->admininfo = $info;
+	}
 }

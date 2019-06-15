@@ -18,7 +18,7 @@ class Controller extends BaseController
 	
 	public function __construct()
     {
-        $this->now = date('Y-m-d H:i:s');
+        $this->now = nowdt();
     }
 	
 	

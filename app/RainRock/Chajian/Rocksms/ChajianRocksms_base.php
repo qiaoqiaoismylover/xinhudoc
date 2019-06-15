@@ -71,12 +71,12 @@ class ChajianRocksms_base extends ChajianRocksms
 		
 		$barr =  $this->send($mobile,'yzm', $params);
 		if($barr['success']){
-			Cache::put('mo'.$mobile.'', time(), $time);
-			Cache::put('mo'.$device.'', time(), $time);
+			Cache::put('mo'.$mobile.'', time(), $time/60);
+			Cache::put('mo'.$device.'', time(), $time/60);
 			
 			//记录起来
 			$key = md5($mobile.$gtype.$device);
-			Cache::put($key, md5('abc'.$code.''), 5*60);//5分钟内容
+			Cache::put($key, md5('abc'.$code.''), 5);//5分钟内容
 		}
 		
 		return $barr;
@@ -93,6 +93,7 @@ class ChajianRocksms_base extends ChajianRocksms
 		if($val!=md5('abc'.$code.'')){
 			return false;
 		}else{
+			Cache::forget($key);
 			return true;
 		}
 	}

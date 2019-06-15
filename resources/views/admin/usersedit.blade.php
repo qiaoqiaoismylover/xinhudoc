@@ -102,7 +102,7 @@
 @endsection
 
 @section('script')
-<script src="/base/upfilejs"></script>
+<script src="/base/upfilejs?cfrom=admin"></script>
 <script>
 function initbody(){
 	upbtn = $.rockupfile({

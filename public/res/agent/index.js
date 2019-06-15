@@ -2,6 +2,7 @@ var tabsarr={},nowtabs,opentabs=[];
 function initbody(){
 	objcont = $('#content_allmainview');
 	objtabs = $('#tabs_title');
+	if(show_key!='')jm.setJmstr(jm.base64decode(show_key));
 	resizewh();
 	$(window).resize(resizewh);
 	clickhome();

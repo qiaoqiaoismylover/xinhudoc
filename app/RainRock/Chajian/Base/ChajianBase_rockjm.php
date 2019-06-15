@@ -197,4 +197,76 @@ class ChajianBase_rockjm extends ChajianBase
 		}
 		return $rows;
 	}
+	
+	
+	/**
+	*	字符串加密
+	*/
+	public function strlook($data)
+	{
+		if(isempt($data))return '';
+		$key	= md5($this->jmsstr);
+		$x		= 0;
+		$len	= strlen($data);
+		$l		= strlen($key);
+		$char 	= $str = '';
+		for ($i = 0; $i < $len; $i++){
+			if ($x == $l) {
+				$x = 0;
+			}
+			$char .= $key{$x};
+			$x++;
+		}
+		for ($i = 0; $i < $len; $i++){
+			$str .= chr(ord($data{$i}) + (ord($char{$i})) % 256);
+		}
+		return $this->base64encode($str);
+	}
+	
+	/**
+	*	字符串解密
+	*/
+	public function strunlook($data)
+	{
+		if(isempt($data))return '';
+		$key	= md5($this->jmsstr);
+		$x 		= 0;
+		$data 	= $this->base64decode($data);
+		$len 	= strlen($data);
+		$l 		= strlen($key);
+		$char 	= $str = '';
+		for ($i = 0; $i < $len; $i++){
+			if ($x == $l) {
+				$x = 0;
+			}
+			$char .= substr($key, $x, 1);
+			$x++;
+		}
+		for ($i = 0; $i < $len; $i++){
+			if (ord(substr($data, $i, 1)) < ord(substr($char, $i, 1))){
+				$str .= chr((ord(substr($data, $i, 1)) + 256) - ord(substr($char, $i, 1)));
+			}else{
+				$str .= chr(ord(substr($data, $i, 1)) - ord(substr($char, $i, 1)));
+			}
+		}
+		return $str;
+	}
+	
+	/**
+	*	是否加密的字符串
+	*/
+	public function isjm($s)
+	{
+		$bo = false;
+		if(!$s)return $bo;
+		$bo = preg_match("/^([a-z]{2,3})0([a-z]{2,3})0([a-z]{2,3})0([a-z0])*([1-9]{1,2})$/", $s);
+		return $bo;
+		$a 	= explode('0', $s);
+		$len= count($a);
+		if($len>1){
+			$ls=(int)$a[$len-1];
+			if($ls>=1&&$ls<=14)$bo=true;
+		}
+		return $bo;
+	}
 }

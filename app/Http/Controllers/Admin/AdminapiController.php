@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use Auth;
 
 class AdminapiController extends AdminController
 {
@@ -20,6 +21,7 @@ class AdminapiController extends AdminController
 		$acta	= explode('_', $act);
 		$runa	= arrvalue($acta, 1, 'getData');
 		$obj 	= c('Adminapi:'.$acta[0].'');
+		$obj->setAdminInfo(Auth::user());
 		$barr 	= $obj->$runa($request);
 		if(!$barr['success'])return $this->returnerror($barr['msg']);
 		return $barr['data'];
@@ -33,6 +35,7 @@ class AdminapiController extends AdminController
 		$acta	= explode('_', $act);
 		$runa	= 'post'.arrvalue($acta, 1, 'Data');
 		$obj 	= c('Adminapi:'.$acta[0].'');
+		$obj->setAdminInfo(Auth::user());
 		$barr 	= $obj->$runa($request);
 		if(!$barr['success'])return $this->returnerror($barr['msg']);
 		return $barr['data'];

@@ -1,5 +1,5 @@
 var HOST='',PARAMS='',QOM='xinhuyun_',apiurl='',TOKEN='',device='',CFROM='pc',ISDEMO=false,NOWURL='',nwjsgui=false,TOKENKEY='usertoken';
-var windows	= null,ismobile=0;
+var windows	= null,ismobile=0,adminid=0;
 function initbody(){}
 function bodyunload(){}
 function globalbody(){}
@@ -896,12 +896,9 @@ js.sendeditoffice=function(id,lx,bcal){
 	if(!lx)lx='0';
 	if(!bcal)bcal='';
 	js.loading('加载中...');
-	this.ajax('/filesend/'+cnum+'/'+id+'',{lx:lx,callb:bcal},function(ret){
-		if(ret.success){
-			js.cliendsend('rockoffice',{paramsstr:ret.data},false,function(){js.msg('msg','无法使用，可能没有安装在线编辑插件');return true;});
-		}else{
-			js.msg('msg', ret.msg);
-		}
+	var ckey = jm.encrypt(''+cnum+'_'+adminid+'');
+	this.ajax('/filesend/'+ckey+'/'+id+'',{lx:lx,callb:bcal},function(ret){
+		js.cliendsend('rockoffice',{paramsstr:ret.data},false,function(){js.msg('msg','无法使用，可能没有安装在线编辑插件');return true;});
 	});
 }
 

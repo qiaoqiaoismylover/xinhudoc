@@ -15,36 +15,31 @@ use Illuminate\Http\Request;
 class UpfileController extends ApiauthController
 {
 	
+
+
 	/**
-	*	上传文件
+	*	上传文件，需要用户登录的
 	*/
 	public function upFileacheck(Request $request)
 	{
 		$this->getUserId();
-		$upobj	= c('upfile');
-		$uptype	= $request->get('uptype');
-		$cnum		= $request->get('cnum');
+		$cnum	= $request->get('cnum');
+		if(!isempt($cnum))$this->getCompanyId($request, $cnum);
+		
+		$upobj		= c('upfile');
+		$uptype		= $request->get('uptype');
 		$thumbnail	= $request->get('thumbnail');
 		$updir		= $request->get('updir');
-		if(!isempt($cnum))$this->getCompanyId($request, $cnum);
-		if(isempt($uptype))$uptype = '*';
-		if(isempt($updir)){
-			$updir=date('Y-m');
-		}else{
-			$updir=str_replace(array(' ','.'),'', trim($updir));
-			$updir=str_replace('{month}',date('Y-m'), $updir);
-			$updir=str_replace('{Year}',date('Y'), $updir);
-			$updir=str_replace(array('{','}'),'', $updir);
-			$updir=str_replace(',','|', $updir);
-		}
-		$upobj->initupfile($uptype, ''.config('rock.updir').'|'.$updir.'');
+		
+		$upobj->initupfile($uptype, $upobj->getupdir($updir));
 		$upses	= $upobj->up('file');
 		if(is_array($upses)){
 			if(isempt($thumbnail))$thumbnail='150x150';//默认缩略图大小
 			$upses	= $upobj->uploadback($upses, $thumbnail, array(
 				'cid' => $this->companyid,
 				'aid' => $this->useaid,
-				'uid' => $this->userid
+				'uid' => $this->userid,
+				'optname' => $this->userinfo->name,
 			));
 			return $upses;
 		}else{

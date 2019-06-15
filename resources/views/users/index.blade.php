@@ -96,7 +96,10 @@
 
 
 <script>
-var cnum = '{{ $companyinfo->num }}',adminid=0,useatype={{ $useatype }};
+var cnum = '{{ $companyinfo->num }}',
+	adminid={{ $useainfo->id }},
+	useatype={{ $useatype }},
+	show_key='{{ $show_key }}';
 function exitlogin(){
 	var url = '{{ route('usersloginout') }}';
 	

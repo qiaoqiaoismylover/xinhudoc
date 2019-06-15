@@ -14,7 +14,7 @@
 var config = {
     "document": {
         "fileType": "{{ $fileext }}",
-        //"key": "{{ $cnum }}{{ $filenum }}a",
+        "key": "",
         "title": "{{ $filename }}",
         "url": "{{ $url }}",
 		"permissions": {
@@ -58,10 +58,7 @@ var config = {
                 "www": "{{ $appurl }}"
             }
 		},
-		"callbackUrl": "{{ $callbackUrl }}"+jm.base64decode("{{ $callbackCan }}")+""
-		//"callbackUrl": "https://api.onlyoffice.com/editors/callback"
-		//"callbackUrl": "http://192.168.1.104/call.php"
-		//"callbackUrl": "http://doc.rockoa.com/call.php"
+		"callbackUrl": "{{ $callbackUrl }}"
 	},
 	"height": "100%",
 	"width": "100%",

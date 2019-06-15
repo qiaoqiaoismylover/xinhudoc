@@ -18,12 +18,18 @@ Route::get('/', 'Users\HomeController@index')->name('usersindex');
 Route::get('/base/{act}', 'Base\BaseController@index')->name('base');
 
 
-Route::get('/fileview/{cnum}/{filenum}', 'Api\FileoptController@fileview')->name('fileview');
-Route::get('/filedown/{cnum}/{filenum}', 'Api\FileoptController@filedown')->name('filedown');
-Route::get('/fileedit/{cnum}/{filenum}', 'Api\FileoptController@fileedit')->name('fileedit');
-Route::get('/filesend/{cnum}/{filenum}', 'Api\FileoptController@filesend')->name('filesend');
-Route::post('/fileeditcall/{cnum}/{filenum}', 'Api\FileoptController@fileeditcall')->name('fileeditcall');
-Route::get('/fileeditcall/{cnum}/{filenum}', 'Api\FileoptController@fileeditgcall')->name('fileeditgcall');
+//文件预览编辑
+Route::get('/fileview/{ckey}/{filenum}', 'Api\FileoptController@fileview')->name('fileview');
+Route::get('/filedown/{ckey}/{filenum}', 'Api\FileoptController@filedown')->name('filedown');
+Route::get('/fileedit/{ckey}/{filenum}', 'Api\FileoptController@fileedit')->name('fileedit');
+Route::post('/fileeditcall/{ckey}/{filenum}', 'Api\FileoptController@fileeditcall')->name('fileeditcall');
+Route::get('/filesend/{ckey}/{filenum}', 'Api\FileoptController@filesend')->name('filesend');
+
+
+//对外接口时文件预览的
+Route::get('/afileview/{filenum}', 'Api\FileoptController@afileview')->name('afileview');
+Route::get('/afiledown/{filenum}', 'Api\FileoptController@afiledown')->name('afiledown');
+
 
 /**
 *	平台用户路由

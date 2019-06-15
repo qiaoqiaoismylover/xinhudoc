@@ -8,7 +8,7 @@
 
 (function ($) {
 	maxupgloble = {{ $maxup }};
-	upurlgloble = '{{ $upurl }}';
+	upurlgloble = '{{ $appurl }}';
 	function rockupfile(opts){
 		var me 		= this;
 		var opts	= js.apply({
@@ -21,6 +21,7 @@
 			uptype:'*',
 			upbadata:[],
 			maxsize:0,
+			maxup:0,
 			onchange:function(){},
 			onprogress:function(){},
 			onsuccess:function(){},
@@ -45,7 +46,9 @@
 				}}catch(e){}
 			});
 			if(maxupgloble>0)this.maxsize= maxupgloble;
-			if(this.fileview)$('#'+this.fileview+'').click(function(){me.rexushow();});
+			if(this.fileview){
+				$('#'+this.fileview+'').click(function(){me.rexushow();});
+			}
 			if(this.dropview && get(this.dropview)){
 				document.ondragover=function(e){e.preventDefault();};
 				document.ondrop=function(e){e.preventDefault();};
@@ -79,6 +82,12 @@
 		},
 		this.changefile=function(ars){
 			if(this.upbool)return;
+			if(this.maxup>0){
+				if(this.gsize()>=this.maxup){
+					js.msg('msg','最多可添加'+this.maxup+'个文件');
+					return false;
+				}
+			}
 			this.setparams(ars);
 			get(this.inputfile).click();
 		};
@@ -97,8 +106,14 @@
 			this.changes(0);
 		};
 		this.changes=function(oi){
-			
-			if(oi>=this.fileswait.length){
+			var bou = true,deglen=this.fileswait.length;
+			if(this.maxup>0){
+				if(this.gsize()>=this.maxup){
+					if(oi<deglen)js.msg('msg','最多可添加'+this.maxup+'个文件');
+					bou = false;
+				}
+			}
+			if(oi>=deglen || !bou){
 				this.rexushow();
 				setTimeout(function(){me.reset();},500);
 				return false;
@@ -252,6 +267,13 @@
 			}
 			return bo;
 		};
+		this.gsize=function(){
+			var ol	= 0,i,d=this.fileallarr;
+			for(i=0;i<d.length;i++){
+				if(this.fileviewxu(d[i].xu))ol++;
+			}
+			return ol;
+		};
 		this.sendbase64=function(nr,ocs){
 			this.filearr=js.apply({filename:'截图.png',filesize:0,filesizecn:'',isimg:true,fileext:'png'}, ocs);
 			this._startup(false, nr);
@@ -338,7 +360,7 @@
 			this.upbool = true;
 			//if(this.initpdbool && fs && !bos){this._initfile(fs);return;}
 			try{var xhr = new XMLHttpRequest();}catch(e){js.msg('msg','当前浏览器不支持2');return;}
-			var url = ''+upurlgloble+'/api/upfile?uptoken='+this.uptoken+'';
+			var url = ''+upurlgloble+'{{ $upurl }}?uptoken='+this.uptoken+'';
 			if(this.thumbnail)url+='&thumbnail='+this.thumbnail+'';
 			if(this.updir)url+='&updir='+this.updir+'';
 			if(typeof(cnum)=='string')url+='&cnum='+cnum+'';

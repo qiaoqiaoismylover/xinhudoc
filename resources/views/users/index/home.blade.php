@@ -208,22 +208,26 @@ $(document).ready(function(){
 				if(officeview=='rockoffice' && officelx.indexOf(','+fext+',')>-1){
 					js.sendeditoffice(jm.base64encode(fnum), 1);
 				}else{
-					window.open('/fileview/'+cnum+'/'+jm.base64encode(fnum)+'');
+					window.open(this.getshowurl('view', fnum));
 				}
 			}
+		},
+		getshowurl:function(lx, fnum){
+			var ckey = jm.encrypt(''+cnum+'_'+adminid+'');
+			return '/file'+lx+'/'+ckey+'/'+jm.base64encode(fnum)+'';
 		},
 		editfile:function(fnum, fext, callb){
 			if(!callb)callb='';
 			if(officeedit=='rockoffice' && officelx.indexOf(','+fext+',')>-1){
 				js.sendeditoffice(jm.base64encode(fnum),0, callb);
 			}else{
-				var url = '/fileedit/'+cnum+'/'+jm.base64encode(fnum)+'';
+				var url = this.getshowurl('edit', fnum);
 				if(callb)url+='?callb='+callb+'';
 				window.open(url);
 			}
 		},
 		downfile:function(fnum, fext){
-			var url = '/filedown/'+cnum+'/'+jm.base64encode(fnum)+'';
+			var url = this.getshowurl('down', fnum);
 			js.location(url);
 		},
 		xuanopt:function(lx){

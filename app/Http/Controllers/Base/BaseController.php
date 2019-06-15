@@ -98,7 +98,7 @@ class BaseController extends Controller
 	}
 	
 	
-	//引入上传的文件，访问地址：http://127.0.0.1:97/base/upfilejs
+	//引入上传的文件，访问地址：http://127.0.0.1:97/base/upfilejs?cfrom=users|admin
 	private function base_upfilejs($request)
 	{
 		$origin 	= $request->header('origin', $request->header('referer'));
@@ -117,9 +117,13 @@ class BaseController extends Controller
 			}
 			if(!$bo)return 'console.error("无效引入js，跨站请设置跨站域名")';
 		}
+		$cfrom	= $request->get('cfrom');
+		$upurl	= '/api/upfile'; //用户上传地址
+		if($cfrom=='admin')$upurl='/webapi/admin/upfile';//总管理后台上传地址
 		return view('base.upfilejs', [
-			'upurl' => appurl(),
-			'maxup' => c('upfile')->getmaxzhao()
+			'appurl' => appurl(),
+			'upurl'  => $upurl,
+			'maxup'  => c('upfile')->getmaxzhao()
 		]);
 	}
 }

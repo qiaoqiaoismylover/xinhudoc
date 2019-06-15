@@ -9,9 +9,6 @@
 
 return [
 	
-	//开发团队名称
-	'xinhu'		=> env('ROCK_XINHU', '信呼开发团队'), 
-	
 	//平台官网地址，用于在线升级等服务器
 	'urly'		=> env('ROCK_URLY', 'http://www.rockoa.com'), 
 	
@@ -19,7 +16,8 @@ return [
 	//平台官网地址官网key
 	'xinhukey'	=> env('ROCK_XINHUKEY', ''), 
 	
-	
+	//对外开放的openkey
+	'openkey'	=> env('ROCK_OPENKEY', ''),
 	
 	//系统随机密钥
 	'randkey'	=> env('ROCK_RANDKEY', ''),

@@ -45,6 +45,7 @@ class CreateFiledaTable extends Migration
 			$table->integer('downci')->default(0)->comment('下载次数');
 			$table->datetime('adddt')->comment('添加时间');
 			$table->datetime('optdt')->comment('操作时间');
+			$table->string('optname',20)->default('')->comment('上传者');
 			$table->string('ip',50)->default('')->comment('ip');
 			$table->string('web',50)->default('')->comment('浏览器');
 			$table->string('remark',200)->default('')->comment('备注');
