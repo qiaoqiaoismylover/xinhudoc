@@ -17,3 +17,6 @@ Route::post('/upfile/file', 'OpenApi\UpfileController@postfile');
 
 //获取文件信息
 Route::get('/upfile/info', 'OpenApi\UpfileController@getinfo');
+
+//删除文件
+Route::get('/upfile/del', 'OpenApi\UpfileController@delfile');

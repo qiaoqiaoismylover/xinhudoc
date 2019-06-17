@@ -390,6 +390,24 @@ class ChajianBase_upfile extends ChajianBase
 		}
 	}
 	
+	/**
+	*	删除文件到回收站
+	*/
+	public function delTorecycle($filenum)
+	{
+		$time = (int)config('rock.recycle');
+		if($time<=0){
+			$this->delfile($filenum);
+		}else{
+			$frs = FiledaModel::where('filenum', $filenum)->first();
+			if($frs){
+				$frs->isdel = 1;
+				$frs->deldt = nowdt();
+				$frs->save();
+			}
+		}
+	}
+	
 	public function getupdir($updir, $lx='|')
 	{
 		if(isempt($updir)){

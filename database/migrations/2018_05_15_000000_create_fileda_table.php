@@ -53,7 +53,12 @@ class CreateFiledaTable extends Migration
 			$table->string('table',50)->default('')->comment('对应表');
 			$table->integer('mid')->default(0)->comment('对应table表中id');
 			
+			$table->tinyInteger('isdel')->default(0)->comment('是否删除');
+			$table->datetime('deldt')->nullable()->comment('删除时间');
+			$table->integer('outuid')->default(0)->comment('外部对应用户Id');
+			
 			$table->unique('filenum'); 
+			$table->index('aid');
         });
     }
 

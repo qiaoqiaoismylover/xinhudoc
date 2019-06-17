@@ -71,8 +71,10 @@ class FileoptController extends ApiauthController
 		$this->companyinfo->name 		= config('app.name');
 		$this->useainfo->deptallname 	= '';
 		$this->useainfo->email = '';
+		$this->useainfo->user  = arrvalue($barr,'user');
 		$this->useainfo->name  = $this->jm->base64decode($barr['name']);
 		
+		$barr['key']	= $key;
 		return $barr;
 	}
 	
@@ -273,6 +275,13 @@ class FileoptController extends ApiauthController
 	/**
 	*	编辑
 	*/
+	public function afileedit($filenum, Request $request)
+	{
+		$msga 	= $this->changekey($request);
+		if($msga && is_string($msga))return $this->returntishi($msga);
+		$curl	= Rock::replaceurl('afileeditcall/'.$filenum.'?callurl='.$msga['callurl'].'',1);
+		return $this->fileeditshow($filenum, $curl, $request);
+	}
 	public function fileedit($ckey, $filenum, Request $request)
 	{
 		$msga 	= $this->changeckey($ckey);
@@ -325,7 +334,7 @@ class FileoptController extends ApiauthController
 				$barr['viewtype'] 	 = c('base')->ismobile() ? 'mobile' : 'desktop';
 				
 
-				if(!isempt($callbackUrl))$callbackUrl.='?callb='.$callb.'';
+				if(!isempt($callb))$callbackUrl.='?callb='.$callb.'';
 				$barr['callbackUrl'] = $callbackUrl;//在线编辑回调保存地址
 			}
 			//用官网的
@@ -340,6 +349,39 @@ class FileoptController extends ApiauthController
 		}
 		
 		if($tplv!='')return view('base.fileedit_'.$tplv.'', $barr);
+	}
+	
+	
+	public function afileeditcall($filenum, Request $request)
+	{
+		$body_stream = file_get_contents("php://input");
+		addlogs($body_stream, 'afileedit_new');
+		$data 	= json_decode($body_stream, true);
+		$status = $data['status'];
+		$frs 	= FiledaModel::where('filenum', $this->jm->base64decode($filenum))->first();
+		
+		$newext = $frs->fileext;
+		if($newext=='xls')$newext = 'xlsx';
+		if($newext=='doc')$newext = 'docx';
+		if($newext=='ppt')$newext = 'pptx';
+		
+		//推送到对应网址上
+		$callurl= $request->get('callurl');
+		if(!isempt($callurl)){
+			$callurl = $this->jm->base64decode($callurl);
+			$callurl.= '&fileext='.$newext.'';
+			$cont 	 = @file_get_contents($data['url']);
+			if($cont){
+				$cont= base64_encode($cont);
+				$result = Rock::curlpost($callurl, $cont);
+				addlogs($result, 'afileedit_new');
+			}
+			$frs->mid = 0;
+			$frs->save();
+		}
+		
+			
+		return "{\"error\":0}";
 	}
 	
 	public function fileeditcall($ckey, $filenum, Request $request)

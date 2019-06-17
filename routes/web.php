@@ -29,7 +29,8 @@ Route::get('/filesend/{ckey}/{filenum}', 'Api\FileoptController@filesend')->name
 //对外接口时文件预览的
 Route::get('/afileview/{filenum}', 'Api\FileoptController@afileview')->name('afileview');
 Route::get('/afiledown/{filenum}', 'Api\FileoptController@afiledown')->name('afiledown');
-
+Route::get('/afileedit/{filenum}', 'Api\FileoptController@afileedit')->name('afileedit');
+Route::post('/afileeditcall/{filenum}', 'Api\FileoptController@afileeditcall')->name('afileeditcall');
 
 /**
 *	平台用户路由

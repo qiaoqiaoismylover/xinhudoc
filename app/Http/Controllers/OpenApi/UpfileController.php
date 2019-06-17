@@ -86,6 +86,7 @@ class UpfileController extends OpenApiController
 			'thumbpath' => $thumbpath,
 			'pdfpath' 	=> $pdfpath,
 			'filepath' 	=> $toppath,
+			'outuid' 	=> (int)$request->input('optid')
 		));
 		
 		return returnsuccess($barr);
@@ -144,6 +145,7 @@ class UpfileController extends OpenApiController
 			'table' 	=> $table,
 			'mid' 		=> $mid,
 			'filepath' 	=> $toppath,
+			'outuid' 	=> (int)arrvalue($params, 'optid','0')
 		));
 		
 		return returnsuccess($barr);
@@ -173,7 +175,7 @@ class UpfileController extends OpenApiController
 		if($type==2)$qudong	= config('rock.fileopt.edit'); //编辑驱动
 		
 		$offic		= ',doc,docx,xls,xlsx,ppt,pptx,';
-		$key		= $jm->strlook(''.$frs->id.''.$filenum.'_'.$uid.'');
+		$key		= $jm->strlook(''.$frs->id.''.$type.''.$filenum.'_'.$uid.'');
 		$useragent	= $request->userAgent();
 		$url		= '';
 		
@@ -186,6 +188,8 @@ class UpfileController extends OpenApiController
 			'uid' 		=> $uid,
 			'ismobile' 	=> $ismobile,
 			'name' 		=> $request->get('name'),
+			'user' 		=> $request->get('user'),
+			'callurl' 	=> $request->get('callurl'),
 			'logo' 		=> $jm->base64decode($request->get('logo')),
 		), 5); //5分钟
 		
@@ -202,7 +206,7 @@ class UpfileController extends OpenApiController
 		
 		//编辑的
 		if($type==2){
-			$qudong='rockoffice';
+			$url = route('afileedit', $filenums);
 		}
 		
 		$barr['url'] = $url.'?key='.$key.'';
@@ -223,4 +227,15 @@ class UpfileController extends OpenApiController
 		return returnsuccess($barr);
 	}
 	
+	
+	/**
+	*	删除文件
+	*/
+	public function delfile(Request $request)
+	{
+		$filenum = $request->get('filenum');
+		if(isempt($filenum ))return returnerror('filenum is empty');
+		c('upfile')->delTorecycle($filenum);//先删到回收站
+		return returnsuccess('delTorecycle.ok');
+	}
 }

@@ -162,7 +162,7 @@ class ChajianWeapi_docxie extends ChajianWeapi
 			'cid' => $this->companyid,
 		])->first();
 		$obj->delete();
-		c('upfile')->delfile($obj->filenum);
+		c('upfile')->delTorecycle($obj->filenum);
 		return returnsuccess();
 	}
 	

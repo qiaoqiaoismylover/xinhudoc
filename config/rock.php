@@ -37,6 +37,9 @@ return [
 	//上传文件放目录
 	'updir'		=> 'upload',
 	
+	//存在回收站时间(天)，0时时删除文件，默认7天
+	'recycle'	=> env('ROCK_RECYCLE', 7),
+	
 	//文件预览和在线编辑设置
 	'fileopt'	=> array(
 		

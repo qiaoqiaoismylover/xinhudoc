@@ -37,7 +37,7 @@ class CreateUsersTable extends Migration
             $table->string('email',100)->default('')->comment('个人邮箱');
             $table->string('password')->comment('登录密码');
             $table->string('face',200)->default('')->comment('头像');
-			$table->integer('bootstyle')->default(0)->comment('用户样式');
+			$table->integer('bootstyle')->default(0)->comment('后台样式地址');
 			$table->integer('flaskm')->default(0)->comment('可创建单位数');
 			$table->integer('flasks')->default(0)->comment('已创建单位数');
 			
