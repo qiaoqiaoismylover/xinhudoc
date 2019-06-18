@@ -110,10 +110,11 @@ class UpfileController extends OpenApiController
 		
 		$data		= isset($GLOBALS['HTTP_RAW_POST_DATA'])? $GLOBALS['HTTP_RAW_POST_DATA'] : file_get_contents('php://input');
 		
+		if(!$data)return returnerror('post data is empty');
 		
 		$filepath	= $params['filepath'];
 		$toppath	= ''.$updir.'/'.$this->updircl($filepath).'';
-		$bo 		= c('base')->createtxt($toppath, $data);
+		$bo 		= c('base')->createtxt($toppath, base64_decode($data));
 		if(!$bo)return returnerror('upfile '.$filepath.' error');
 		
 		$table		= nulltoempty($params['table']);
@@ -167,7 +168,7 @@ class UpfileController extends OpenApiController
 		$filename = $frs->filename;
 		$filepath = $frs->filepath;
 		
-		if(!$frs->fileexists)return returnsuccess('文件不存在');
+		if(!$frs->fileexists)return returnerror('文件不存在');
 		$jm 		= c('rockjm');
 		$upobj 		= c('upfile');
 		
