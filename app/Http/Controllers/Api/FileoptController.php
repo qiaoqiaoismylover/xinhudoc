@@ -129,6 +129,7 @@ class FileoptController extends ApiauthController
 		$filename = $frs->filename;
 		$fileext  = $frs->fileext;
 		$filepath = $frs->filepath;
+		$ismobile = c('base')->ismobile();
 		if(!$frs->fileexists)return $this->returntishi('文件不存在');
 	
 		$barr['filename'] 		= $filename;
@@ -159,6 +160,15 @@ class FileoptController extends ApiauthController
 				$conf 	= config('rock.fileopt');
 				$viewqd = $conf['view'];
 				
+				//手机端
+				if($ismobile && $viewqd=='rockoffice'){
+					if(env('ROCK_ONLYOFFICE')){
+						$viewqd='onlyoffice';
+					}else{
+						$viewqd='microsoft';
+					}
+				}
+				
 				if(!isset($conf[$viewqd]))return $this->returntishi('没有配置此预览驱动'.$viewqd.'');
 				$qdconf = $conf[$viewqd];
 				
@@ -174,7 +184,7 @@ class FileoptController extends ApiauthController
 					$barr['appurl']   = config('app.url');
 					$barr['useainfo']  	  	 = $this->useainfo;
 					$barr['documentType']  	 = $this->getdocumentType($fileext);
-					$barr['viewtype'] = c('base')->ismobile() ? 'mobile' : 'desktop';
+					$barr['viewtype'] = $ismobile ? 'mobile' : 'desktop';
 				}
 				
 				//用官网的
@@ -298,6 +308,7 @@ class FileoptController extends ApiauthController
 		$filename = $frs->filename;
 		$fileext  = $frs->fileext;
 		$filepath = $frs->filepath;
+		$ismobile = c('base')->ismobile();
 		if(!$frs->fileexists)return $this->returntishi('文件不存在');
 		
 		$callb	    			= $request->get('callb'); //回调
@@ -321,6 +332,14 @@ class FileoptController extends ApiauthController
 		}else if(contain($offic,','.$fileext.',')){
 			$conf 	= config('rock.fileopt');
 			$viewqd = $conf['edit'];
+			
+			//手机端
+			if($ismobile && $viewqd=='rockoffice'){
+				if(env('ROCK_ONLYOFFICE')){
+					$viewqd='onlyoffice';
+				}
+			}
+			
 			if(!isset($conf[$viewqd]))return $this->returntishi('没有配置此编辑驱动'.$viewqd.'');
 			$qdconf = $conf[$viewqd];
 			$url 	= Rock::replaceurl($filepath,1);
@@ -331,7 +350,7 @@ class FileoptController extends ApiauthController
 				$barr['appurl']   = config('app.url');
 				$barr['useainfo']  	  	= $this->useainfo;
 				$barr['documentType']  	= $this->getdocumentType($fileext);
-				$barr['viewtype'] 	 = c('base')->ismobile() ? 'mobile' : 'desktop';
+				$barr['viewtype'] 	 = $ismobile ? 'mobile' : 'desktop';
 				
 
 				if(!isempt($callb))$callbackUrl.='?callb='.$callb.'';

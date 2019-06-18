@@ -163,7 +163,7 @@ class UpfileController extends OpenApiController
 		$uid 	 = (int)$request->get('uid');
 		$frs  = FiledaModel::where('filenum',$filenum)->first();
 		if(!$frs)return returnerror('文件记录不存在');
-		$fileext = $frs->fileext;
+		$fileext  = $frs->fileext;
 		$filename = $frs->filename;
 		$filepath = $frs->filepath;
 		
@@ -217,6 +217,11 @@ class UpfileController extends OpenApiController
 				$barr['url'] 	 = Rock::replaceurl($filepath); //文档下载地址
 				$barr['fileext'] = $qudong;
 			}
+		}
+		
+		//手机端预览有是本地插件
+		if($type==0 && $ismobile==1 && $qudong=='rockoffice'){
+			
 		}
 		
 		//图片时返回对应图片地址
