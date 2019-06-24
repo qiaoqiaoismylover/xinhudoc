@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ $pagetitle or config('app.nameadmin') }}</title>
 <link href="{{ $bootstyle['path'] }}" rel="stylesheet">
+<link rel="shortcut icon" href="{{ config('app.logo') }}" />
 <script src="/js/jquery.1.9.1.min.js"></script>
 <script src="/js/js.js"></script>
 </head>

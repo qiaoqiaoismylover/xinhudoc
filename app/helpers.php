@@ -71,7 +71,9 @@ if (! function_exists('addlogs')) {
 	function addlogs($data,$key='')
 	{
 		if(is_array($data))$data = json_encode($data, JSON_UNESCAPED_UNICODE);
-		$dir 	= public_path('upload/logs');
+		$dir 	= public_path('upload');
+		if(!is_dir($dir))mkdir($dir);
+		$dir 	= ''.$dir.'/logs';
 		if(!is_dir($dir))mkdir($dir);
 		$file 	= $dir.'/'.date('Y-m-d').''.$key.'.log';
 		
