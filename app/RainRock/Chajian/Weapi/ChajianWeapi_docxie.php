@@ -126,6 +126,7 @@ class ChajianWeapi_docxie extends ChajianWeapi
 		$barr['cid'] 	= $this->companyid;
 		$barr['aid'] 	= $this->useaid;
 		$barr['uid'] 	= $this->userid;
+		$barr['optname']= $this->adminname;
 		
 		$barr = c('upfile')->createFileda($barr);
 		
@@ -135,16 +136,16 @@ class ChajianWeapi_docxie extends ChajianWeapi
 		$uarr['fenlei'] 	= $fenlei;
 		$uarr['optdt']  = $this->now;
 		$uarr['adddt']  = $this->now;
-		$uarr['optname']   	= $this->useainfo->name;
+		$uarr['optname']   	= $this->adminname;
 		$uarr['filename']   = $filename;
 		$uarr['fileext']   	= $fileext;
 		$uarr['explian']   	= $explian;
 		$uarr['filenum']   	= $barr['filenum'];
 		
 		$uarr['xienameid']   	= 'u'.$this->useaid.'';
-		$uarr['xiename']   		= $this->useainfo->name;
+		$uarr['xiename']   		= $this->adminname;
 		$uarr['receid']   		= 'u'.$this->useaid.'';
-		$uarr['recename']   	= $this->useainfo->name;
+		$uarr['recename']   	= $this->adminname;
 		
 		DB::table('docxie')->insert($uarr);
 		

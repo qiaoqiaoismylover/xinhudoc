@@ -75,6 +75,7 @@ class ChajianWeapi_docfile extends ChajianWeapi
 		if(!isempt($sort) && !isempt($dir)){
 			$obj->orderBy($sort, $dir);
 		}else{
+			$obj->orderBy('sort','asc');
 			$obj->orderBy('optdt','desc');
 		}
 		
@@ -82,7 +83,10 @@ class ChajianWeapi_docfile extends ChajianWeapi
 		
 		foreach($rowa as $k=>$rs){	
 			$downshu = 0;
-			if($rs->type==1)$downshu = Agent_word::where('folderid', $rs->id)->count();
+			if($rs->type==1){
+				$downshu = Agent_word::where('folderid', $rs->id)->count();
+				$rs->optname = '';
+			}
 			$rs->downshu = $downshu;
 			
 			//关联文件读取，判断是不是存在

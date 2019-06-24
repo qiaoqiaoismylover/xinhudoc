@@ -87,6 +87,7 @@ class ChajianWeapi_doctpl extends ChajianWeapi
 		$barr['cid'] 	= $this->companyid;
 		$barr['aid'] 	= $this->useaid;
 		$barr['uid'] 	= $this->userid;
+		$barr['optname']= $this->adminname;
 		
 		$barr = c('upfile')->createFileda($barr);
 		
@@ -94,7 +95,7 @@ class ChajianWeapi_doctpl extends ChajianWeapi
 		$uarr['aid'] 	= $this->useaid;
 		$uarr['uid'] 	= $this->userid;
 		$uarr['optdt']  = $this->now;
-		$uarr['optname']   	= $this->useainfo->name;
+		$uarr['optname']   	= $this->adminname;
 		$uarr['filename']   = $filename;
 		$uarr['fileext']   	= $fileext;
 		$uarr['filenum']   	= $barr['filenum'];

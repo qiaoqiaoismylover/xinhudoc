@@ -224,8 +224,9 @@ class FileoptController extends ApiauthController
 	}
 	public function afiledown($filenum, Request $request)
 	{
+		$cfrom	= nulltoempty($request->get('cfrom'));
 		$msga 	= $this->changekey($request);
-		if($msga && is_string($msga))return $this->returntishi($msga);
+		if($msga && is_string($msga) && $cfrom!='app')return $this->returntishi($msga);
 		return $this->filedownshow($filenum);
 	}
 	private function filedownshow($filenum)

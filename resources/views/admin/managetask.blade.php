@@ -35,7 +35,6 @@
 			<th>{{ trans('table/task.lastdt') }}</th>
 			<th>{{ trans('table/task.lastcont') }}</th>
 			<th>{{ trans('table/task.explain') }}<i class="glyphicon glyphicon-pencil"></i></th>
-			<th>{{ trans('table/task.cid') }}</th>
 			<th></th>
 		</tr>
 		@foreach ($data as $item)
@@ -56,7 +55,6 @@
 			<td>{{ $item->lastdt }}</td>
 			<td>{{ $item->lastcont }}</td>
 			<td edata-fields="explain">{{ $item->explain }}</td>
-			<td>{{ $item->cid }}</td>
 			<td>
 				<a href="javascript:;" onclick="onpotstr('taskrun', {{ $item->id }})">{{ trans('table/task.yunxing') }}</a>
 				<a href="javascript:;" onclick="delconfirm({{ $item->id }})">{{ trans('base.deltext') }}</a>

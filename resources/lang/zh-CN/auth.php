@@ -15,5 +15,6 @@ return [
 
     'failed' => '登录邮箱密码不正确.',
     'throttle' => '太多的登录尝试， 请再次尝试:seconds秒。',
-
+	
+	'notaccess'	=> '您IP[:ip]禁止访问我们站点，有问题请联系我们'
 ];

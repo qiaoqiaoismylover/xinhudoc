@@ -20,31 +20,9 @@ class ChajianTask_system extends ChajianTask
 	*/
 	public function minute()
 	{
-		c('remind')->todorun(); //单据通知设置提醒
-		c('remind')->tasktodo(); //单据通知设置提醒
 		return 'success';
 	}
 	
-	/**
-	*	流程匹配
-	*/
-	public function flowpei()
-	{
-		$rows 	= CompanyModel::get();
-		$msg 	= '';
-		foreach($rows as $k=>$rs){
-			$cid = $rs->id;
-			$useainfo = UseraModel::where('cid', $cid)->where('uid', $rs->uid)->first(); //创建人
-			$msgs 	  = c('flow', $useainfo)->pipeiall($cid);
-			if($msgs!=''){
-				$msgs = '【'.$rs->name.'】<br>'.$msgs.'';
-				if($msg!='')$msg .= '<br>';
-				$msg .= $msgs;
-			}
-		}
-		if($msg!='')c('log')->adds('计划任务',$msg, '系统');
-		return 'success';
-	}
 	
 	/**
 	*	单位用户更新

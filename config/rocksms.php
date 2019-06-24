@@ -8,10 +8,12 @@
 */
 
 return [
-
-    'provider' 	=> env('ROCK_SMSPROVIDER', 'smsxinhu'), //驱动:smsali,smsxinhu
 	
+	 //驱动:smsali,smsxinhu
+    'provider' 	=> env('ROCK_SMSPROVIDER', 'smsxinhu'),
 	
+	//是否需要短信验证码登录
+	'yzmlogin'	=> env('ROCK_YZMLOGIN', false),
 	
 	//用阿里云短信的
 	'smsali'	=> [

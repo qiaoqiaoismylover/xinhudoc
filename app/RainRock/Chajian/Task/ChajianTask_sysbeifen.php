@@ -11,6 +11,7 @@
 namespace App\RainRock\Chajian\Task;
 
 use DB;
+use App\Model\Base\FiledaModel;
 
 class ChajianTask_sysbeifen extends ChajianTask
 {
@@ -20,6 +21,7 @@ class ChajianTask_sysbeifen extends ChajianTask
 	*/	
 	public function run()
 	{
+		$this->delhsz();
 		
 		$qz 		= DB::getTablePrefix();
 		$db 		= c('mysql');
@@ -57,6 +59,20 @@ class ChajianTask_sysbeifen extends ChajianTask
 		$filepath 	= ''.$spath.'/'.$file.'';
 		@$bo 		= file_put_contents($filepath, $strstr);
 		if(!$bo)return 'error';
+		return 'success';
+	}
+	
+	/**
+	*	删除回收站过期
+	*/
+	public function delhsz()
+	{
+		$deldt= nowdt('', time()-config('rock.recycle')*24*3600);
+		$rows = FiledaModel::where('isdel', 1)->where('deldt','<', $deldt)->get();
+		if($rows){
+			$fobj = c('upfile');
+			foreach($rows as $k=>$rs)$fobj->delfile($rs->filenum);
+		}
 		return 'success';
 	}
 }

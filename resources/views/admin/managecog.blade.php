@@ -15,7 +15,7 @@
 				<li role="presentation" class="active"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">{{ trans('admin/platcog.infotit') }}</a></li>
 				<li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">{{ trans('admin/platcog.logotit') }}</a></li>
 				<li role="presentation"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">{{ trans('admin/platcog.smstit') }}</a></li>
-				<li role="presentation"><a href="#tab4" aria-controls="tab4" role="tab" data-toggle="tab">{{ trans('admin/platcog.origintit') }}</a></li>
+				
 				<li role="presentation"><a href="#tab6" aria-controls="tab6" role="tab" data-toggle="tab">{{ trans('admin/platcog.filetit') }}</a></li>
 				<li role="presentation"><a href="#tab5" aria-controls="tab5" role="tab" data-toggle="tab">{{ trans('admin/platcog.guantit') }}</a></li>
 				
@@ -116,15 +116,42 @@
 						  </select>
 						</div>
 					</div>
-				</div>
-				
-				<div role="tabpanel" class="tab-pane" id="tab4">
+					
+					<div class="form-group">
+						<label for="input_yzmlogin" class="col-sm-4 control-label"> {{ trans('admin/platcog.yzmlogin') }}(ROCK_YZMLOGIN)</label>
+						<div class="col-sm-8">
+						  <select class="form-control" id="input_yzmlogin" name="ROCK_YZMLOGIN">
+						  <option value="">{{ trans('admin/platcog.yzmlogin_false') }}</option>
+						  <option @if(config('rocksms.yzmlogin'))selected @endif value="true">{{ trans('admin/platcog.yzmlogin_true') }}</option>
+						  </select>
+						</div>
+					</div>
+					
 					<div class="form-group">
 						<label for="input_origin" class="col-sm-4 control-label"> {{ trans('admin/platcog.origin') }}(ALLOW_ORIGIN)</label>
 						<div class="col-sm-8">
 						   <textarea rows="3" class="form-control" onblur="this.value=strreplace(this.value)" placeholder="{{ trans('admin/platcog.origin_msg') }}" id="input_origin" name="ALLOW_ORIGIN">{{ env('ALLOW_ORIGIN') }}</textarea>
 						</div>
 					</div>
+					
+					<div class="form-group">
+						<label for="input_whiteip" class="col-sm-4 control-label"> {{ trans('admin/platcog.whiteip') }}(ACCESS_WHITEIP)</label>
+						<div class="col-sm-8">
+						   <textarea rows="3" class="form-control" onblur="this.value=strreplace(this.value)" placeholder="{{ trans('admin/platcog.whiteip_msg') }}" id="input_whiteip" name="ACCESS_WHITEIP">{{ env('ACCESS_WHITEIP') }}</textarea>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="input_blackip" class="col-sm-4 control-label"> {{ trans('admin/platcog.blackip') }}(ACCESS_BLACKIP)</label>
+						<div class="col-sm-8">
+						   <textarea rows="3" class="form-control" onblur="this.value=strreplace(this.value)" placeholder="{{ trans('admin/platcog.blackip_msg') }}" id="input_blackip" name="ACCESS_BLACKIP">{{ env('ACCESS_BLACKIP') }}</textarea>
+						</div>
+					</div>
+					
+				</div>
+				
+				<div role="tabpanel" class="tab-pane" id="tab4">
+					
 				</div>
 				
 				<div role="tabpanel" class="tab-pane" id="tab6">

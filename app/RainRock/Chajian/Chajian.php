@@ -23,6 +23,7 @@ abstract class Chajian
 	public $companyid 		= 0;
 	public $companyinfo;
 	public $now;
+	public $adminname		= '';
 	
 	protected $basepath		= 'Base';
 	
@@ -30,7 +31,7 @@ abstract class Chajian
 	
 	public function __construct($usera=null)
 	{
-		$this->now	= date('Y-m-d H:i:s');
+		$this->now	= nowdt();
 		$this->initUsera($usera);
 		$this->initChajian();
 	}
@@ -45,6 +46,7 @@ abstract class Chajian
 			$this->useaid 	 = $usera->id;
 			$this->companyid = $usera->cid;
 			$this->userid 	 = $usera->uid;
+			$this->adminname = $usera->name;
 			$this->companyinfo = $usera->company;
 		}
 	}

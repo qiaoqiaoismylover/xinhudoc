@@ -196,18 +196,18 @@ class UpfileController extends OpenApiController
 		
 		//预览
 		if($type==0){
-			$url = route('afileview', $filenums);
+			$url = Rock::replaceurl('afileview/'.$filenums.'', 1);
 		}
 		
 		//下载
 		if($type==1){
-			$url = route('afiledown', $filenums);
+			$url = Rock::replaceurl('afiledown/'.$filenums.'', 1);
 			if($frs->ishttpout)$url = $filepath;//远程地址的
 		}
 		
 		//编辑的
 		if($type==2){
-			$url = route('afileedit', $filenums);
+			$url = Rock::replaceurl('afileedit/'.$filenums.'', 1);
 		}
 		
 		$barr['url'] = $url.'?key='.$key.'';
@@ -227,7 +227,7 @@ class UpfileController extends OpenApiController
 		
 		//图片时返回对应图片地址
 		if($upobj->isimg($fileext) && $type==0){
-			$barr['url'] 	 = Rock::replaceurl($filepath); 
+			$barr['url'] 	 = Rock::replaceurl($filepath, 1); 
 		}
 		
 		return returnsuccess($barr);
@@ -241,7 +241,7 @@ class UpfileController extends OpenApiController
 	{
 		$filenum = $request->get('filenum');
 		if(isempt($filenum ))return returnerror('filenum is empty');
-		c('upfile')->delTorecycle($filenum);//先删到回收站
+		c('upfile')->delfile($filenum);
 		return returnsuccess('delTorecycle.ok');
 	}
 }

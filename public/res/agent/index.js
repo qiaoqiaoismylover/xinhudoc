@@ -80,6 +80,8 @@ function resizewh(){
 	var nh = winHb();
 	$('#indexmenu').css({height:''+nh+'px'});
 	$('#indexsplit').css({height:''+nh+'px'});
+	var nsd = nh-$('#indexmenu_01').height()-20;
+	$('#indexmenu_02').css({height:''+nsd+'px'});
 }
 function clickhome(){
 	var ad = {num:'home',url:'home',icons:'folder-close-alt',name:'文件中心',hideclose:true};
@@ -129,6 +131,11 @@ function closenowtabs(){
 }
 function zuijing(){
 	var ad = {num:'time',url:'time',icons:'time',name:'最近'};
+	addtabs(ad);
+}
+
+function opentrash(){
+	var ad = {num:'trash',url:'trash',icons:'trash',name:'回收站'};
 	addtabs(ad);
 }
 

@@ -25,6 +25,7 @@ class ApiauthController extends ApiController
 	public $useainfo;
 	public $usertoken	= '';
 	public $useragent	= '';
+	public $adminname	= '';
 	
 	
 	public $companyarr	= false; //对应单位下用户usera.id数组
@@ -51,6 +52,7 @@ class ApiauthController extends ApiController
 		if(isempt($uid))$uid = 0;
 		$this->userid 	= $uid;
 		$this->userinfo = $uarr['user.info'];
+		$this->adminname= $this->userinfo->name; 
 		$this->usertoken= $uarr['usertoken'];
 		$this->useragent= $uarr['useragent'];
 		return $uid;
@@ -93,8 +95,11 @@ class ApiauthController extends ApiController
 		}
 		if(!$bo)return 0;
 		$this->useainfo		= BaseModel::getUsera($cid, $this->userid); //单位用户ID
-		if($this->useainfo)$this->useaid = $this->useainfo->id;
-		$this->companyid	= $cid;
+		if($this->useainfo){
+			$this->useaid 	 = $this->useainfo->id;
+			$this->adminname = $this->useainfo->name;
+		}
+		$this->companyid	 = $cid;
 		return $cid;
 	}
 }

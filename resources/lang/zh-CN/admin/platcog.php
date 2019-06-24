@@ -13,7 +13,7 @@ return [
 	
 	'infotit'	=> '基本信息',
 	'logotit'	=> '平台Logo',
-	'smstit'	=> '短信平台',
+	'smstit'	=> '短信和安全',
 	'uploadtit'	=> '文件上传地址',
 	'guantit'	=> '关联信呼官网',
 	'origintit'	=> '跨域上传地址',
@@ -48,9 +48,9 @@ return [
 	
 	
 	'smsprovider'			=> '短信使用平台',
-	'smsprovider_ali'		=> '阿里短信服务',
+	'smsprovider_ali'		=> '阿里短信服务(未开发)',
 	'smsprovider_xinxi'		=> '企业信使',
-	'smsprovider_yunpian'	=> '云片网(待开发)',
+	'smsprovider_yunpian'	=> '云片网(未开发)',
 	'smsprovider_xinhu'		=> '信呼官网短信服务',
 	
 	
@@ -87,5 +87,17 @@ return [
 	'onlyoffice'	=> '自己部署onlyoffice服务地址',
 	'onlyoffice_help'	=> '如何部署onlyoffice服务？请看',
 	
+	
+	'yzmlogin'		=> '短信验证码登录',
+	'yzmlogin_false'=> '不需要',
+	'yzmlogin_true'=> '需要(建议)待开发',
+	
+	
 	'onlyoffice_msg'	=> '自己部署这必须填写，http开头',
+	
+	'blackip'		=> '访问IP黑名单',
+	'blackip_msg'	=> '设置哪些IP禁止访问，写*为全部，多个,分开',
+	
+	'whiteip'		=> '访问IP白名单',
+	'whiteip_msg'	=> '设置哪些IP可以访问，多个,分开',
 ];

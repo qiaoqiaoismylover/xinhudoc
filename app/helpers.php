@@ -190,6 +190,7 @@ function getclientip()
 	}else if(isset($_SERVER['REMOTE_ADDR'])){
 		$ip = $_SERVER['REMOTE_ADDR'];
 	}
+	$ip= htmlspecialchars($ip);
 	return $ip;
 }
 

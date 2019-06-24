@@ -17,47 +17,58 @@
 <table style="width:100%;background:none" cellspacing="0" cellpadding="0">
 <tr valign="top">
 <td>
-	<div class="well" id="indexmenu" style="border-radius:0;border:0;;margin:0;padding:0px;width:200px">
-	<div style="padding:10px">
+	<div class="well" id="indexmenu" style="border-radius:0;border:0;margin:0;padding:0px;width:200px;height:700px;overflow:hidden">
+	<div style="padding:10px" id="indexmenu_01">
 		<div align="center" style="font-size:20px;margin-top:5px">
 			<img src="{{ $companyinfo->logo }}" style="display:inline;" align="absmiddle" height="40" width="40"> {{ $companyinfo->shortname }}
 		</div>
 		<div style="padding-top:15px" align="center">
 			<input type="text" id="menukeyword" class="form-control" placeholder="搜文件名/文件夹">
 		</div>
-		
-		<div style="padding:5px 0px">
-		<ul class="nav nav-pills nav-stacked" id="showfqdiv">
-			<li role="button" onclick="fq.showall()"><a style="TEXT-DECORATION:none"><i class="icon-folder-close-alt"></i> 文件分区 <span data-toggle="tooltip" title="分区管理" id="fqguanbtn" style="float:right"><i class="icon-cog"></i></span></a></li>
+	</div>	
+	<div id="indexmenu_02" style="overflow:auto">
+	<div style="padding:5px 0px">
+	<ul class="nav nav-pills nav-stacked" id="showfqdiv">
+		<li role="button" onclick="fq.showall()"><a style="TEXT-DECORATION:none"><i class="icon-folder-close-alt"></i> 文件分区 <span data-toggle="tooltip" title="分区管理" id="fqguanbtn" style="float:right"><i class="icon-cog"></i></span></a></li>
 
-		</ul>
-		</div>
-	
-		<div style="overflow:hidden;height:1px;background:rgba(0,0,0,0.1)">&nbsp;</div>
-		
-		<div style="padding:5px 0px">
-		<ul class="nav nav-pills nav-stacked">
-			<li role="button" onclick="fq.openshate()"><a style="TEXT-DECORATION:none"><i class="icon-share"></i> 共享的文件</a></li>
-		  
-			<li role="button" onclick="fq.docxie(0)"><a style="TEXT-DECORATION:none"><i class="icon-building"></i> 文档模版</a></li>
-			<li role="button" onclick="fq.docxie(1)"><a style="TEXT-DECORATION:none"><i class="icon-file-alt"></i> 文档协作</a></li>
-		</ul>
-		</div>
-		
-		<!--
-		<div style="overflow:hidden;height:1px;background:rgba(0,0,0,0.1)">&nbsp;</div>
-		<div style="padding:5px 0px">
-		<ul class="nav nav-pills nav-stacked">
-			<li role="button"><a style="TEXT-DECORATION:none"><i class="icon-check"></i> 汇报</a></li>
-			
-			<li role="button" onclick="fq.docxie(2)"><a style="TEXT-DECORATION:none;padding-left:24px">汇报管理</a></li>
-			<li role="button" onclick="fq.docxie(2)"><a style="TEXT-DECORATION:none;padding-left:24px">汇报给我</a></li>
-
-		</ul>
-		</div>
-		-->
-		
+	</ul>
 	</div>
+
+	<div style="overflow:hidden;height:1px;background:rgba(0,0,0,0.1)">&nbsp;</div>
+	
+	<div style="padding:5px 0px">
+	<ul class="nav nav-pills nav-stacked">
+		<li role="button" onclick="fq.openshate()"><a style="TEXT-DECORATION:none"><i class="icon-share"></i> 共享的文件</a></li>
+	  
+		<li role="button" onclick="fq.docxie(0)"><a style="TEXT-DECORATION:none"><i class="icon-building"></i> 文档模版</a></li>
+		<li role="button" onclick="fq.docxie(1)"><a style="TEXT-DECORATION:none"><i class="icon-file-alt"></i> 文档协作</a></li>
+	</ul>
+	</div>
+	
+	<!--
+	<div style="overflow:hidden;height:1px;background:rgba(0,0,0,0.1)">&nbsp;</div>
+	<div style="padding:5px 0px">
+	<ul class="nav nav-pills nav-stacked">
+		<li role="button"><a style="TEXT-DECORATION:none"><i class="icon-check"></i> 汇报</a></li>
+		
+		<li role="button" onclick="fq.docxie(2)"><a style="TEXT-DECORATION:none;padding-left:24px">汇报管理</a></li>
+		<li role="button" onclick="fq.docxie(2)"><a style="TEXT-DECORATION:none;padding-left:24px">汇报给我</a></li>
+
+	</ul>
+	</div>
+	-->
+	
+	<div style="overflow:hidden;height:1px;background:rgba(0,0,0,0.1)">&nbsp;</div>
+	
+	<div style="padding:5px 0px">
+	<ul class="nav nav-pills nav-stacked">
+		<li role="button" onclick="opentrash(1)"><a style="TEXT-DECORATION:none"><i class="icon-trash"></i> 回收站</a></li>
+	</ul>
+	</div>
+	
+	</div>
+		
+	
 	</div>
 </td>
 
