@@ -18,6 +18,10 @@
 | loading any of our classes later on. It feels great to relax.
 |
 */
+
+version_compare(PHP_VERSION, '5.6.4','<') && die('当前PHP版本'.PHP_VERSION.'太低了，必须在5.6.4+');
+
+
 require __DIR__.'/../bootstrap/autoload.php';
 
 /*
