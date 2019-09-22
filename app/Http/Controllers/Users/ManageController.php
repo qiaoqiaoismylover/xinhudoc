@@ -50,7 +50,8 @@ class ManageController extends UsersController
 		$ars	= UseraModel::find($id);
 		return view('users/active',[
 			'ars'		=> $ars,
-			'pagetitle'	=> trans('users/manage.activetitle')
+			'pagetitle'	=> trans('users/manage.activetitle'),
+			'style'		=> $this->getBootstyle()
 		]);
 	}
 }
