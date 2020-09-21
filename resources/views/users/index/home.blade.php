@@ -205,11 +205,13 @@ $(document).ready(function(){
 					js.msgerror(msg);
 				});
 			}else{
-				if(officeview=='rockoffice' && officelx.indexOf(','+fext+',')>-1){
-					js.sendeditoffice(jm.base64encode(fnum), 1);
+				if(officelx.indexOf(','+fext+',')>-1){
+					var url = this.getshowurl('show', fnum);
+					url+='?otype=1';
 				}else{
-					window.open(this.getshowurl('view', fnum));
+					var url = this.getshowurl('view', fnum);
 				}
+				window.open(url);
 			}
 		},
 		getshowurl:function(lx, fnum){
@@ -218,13 +220,10 @@ $(document).ready(function(){
 		},
 		editfile:function(fnum, fext, callb){
 			if(!callb)callb='';
-			if(officeedit=='rockoffice' && officelx.indexOf(','+fext+',')>-1){
-				js.sendeditoffice(jm.base64encode(fnum),0, callb);
-			}else{
-				var url = this.getshowurl('edit', fnum);
-				if(callb)url+='?callb='+callb+'';
-				window.open(url);
-			}
+			var url = this.getshowurl('show', fnum);
+			url+='?otype=0';
+			if(callb)url+='&callb='+callb+'';
+			window.open(url);
 		},
 		downfile:function(fnum, fext){
 			var url = this.getshowurl('down', fnum);

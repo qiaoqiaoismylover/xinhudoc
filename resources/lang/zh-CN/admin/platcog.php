@@ -100,4 +100,10 @@ return [
 	
 	'whiteip'		=> '访问IP白名单',
 	'whiteip_msg'	=> '设置哪些IP可以访问，多个,分开',
+	
+	
+	'rockoffice_url' => '预览编辑平台地址',
+	'rockoffice_key' => '预览编辑key',
+	'rockoffice_keymsg' => '请看帮助获取',
+	'rockoffice_msg' => '可不设置，默认用由信呼官网提供，必须http头',
 ];

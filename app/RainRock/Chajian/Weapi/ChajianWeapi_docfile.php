@@ -274,7 +274,7 @@ class ChajianWeapi_docfile extends ChajianWeapi
 			$drs = DB::table($table)->where('id', $id)->first();
 			$filenum = objvalue($drs,'filenum');
 			$fileext = objvalue($drs,'fileext');
-			if(!contain(strtolower($value),'.'.$fileext.''))
+			if($drs->type==0 && !contain(strtolower($value),'.'.$fileext.''))
 				return returnerror('不允许修改扩展名');
 		}
 		
@@ -604,5 +604,18 @@ class ChajianWeapi_docfile extends ChajianWeapi
 			$this->getpaths($rs->folderid);
 			$this->pathss[] = array('id'=>$rs->id);
 		}
+	}
+	
+	
+	/**
+	*	发送文件编辑预览
+	*/
+	public function sendedit($req)
+	{
+		$id 		= (int)$req->get('id',0);
+		$otype 		= (int)$req->get('otype',0);
+		$ckey		= $req->get('ckey');
+		$callb		= $req->get('callb');
+		return $this->getNei('rockedit')->sendedit($id, $ckey, $otype, $callb);
 	}
 }

@@ -106,6 +106,24 @@ class FileoptController extends ApiauthController
 	}
 	
 	/**
+	*	显示文件去编辑预览
+	*/
+	public function fileshow($ckey, $filenum, Request $request)
+	{
+		$msga 	= $this->changeckey($ckey);
+		if($msga && is_string($msga))return $this->returntishi($msga);
+		$frs = FiledaModel::where('filenum', $this->jm->base64decode($filenum))->first();
+		if(!$frs)return $this->returntishi('文件记录不存在');
+		$filename = $frs->filename;
+		
+		$barr['filename'] 		= $filename;
+		$barr['companyinfo']  	= $this->companyinfo;
+		$barr['frs']  	= $frs;
+		$barr['ckey']  	= $ckey;
+		return view('base.fileshow', $barr);
+	}
+	
+	/**
 	*	预览打开
 	*/
 	public function fileview($ckey, $filenum, Request $request)
@@ -153,6 +171,8 @@ class FileoptController extends ApiauthController
 			if(!contain($bm, 'utf')){
 				$content = @iconv($bm,'utf-8', $content);
 			}
+			$barr['filesizecn'] = $frs->filesizecn;
+			$barr['fileext'] = $fileext;
 			$barr['content'] = $content;
 		}else if(contain($offic,','.$fileext.',')){
 			$pdfpath= $frs->pdfpath;
@@ -179,6 +199,7 @@ class FileoptController extends ApiauthController
 				}
 				if($viewqd=='onlyoffice'){
 					$tplv 	= $viewqd;
+					$url 	= Rock::replaceurl($filepath,2);
 					$barr['onlyurl']  = $qdconf['url'];
 					$barr['filenum']  = $filenum;
 					$barr['appurl']   = config('app.url');

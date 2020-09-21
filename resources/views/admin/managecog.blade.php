@@ -155,35 +155,18 @@
 				</div>
 				
 				<div role="tabpanel" class="tab-pane" id="tab6">
+					
 					<div class="form-group">
-						<label for="input_officeview" class="col-sm-4 control-label"> {{ trans('admin/platcog.officeview') }}(ROCK_OFFICEVIEW)</label>
+						<label for="input_rockoffice_url" class="col-sm-4 control-label"> {{ trans('admin/platcog.rockoffice_url') }}(ROCKOFFICE_URL)</label>
 						<div class="col-sm-8">
-						  <select class="form-control" id="input_officeview" name="ROCK_OFFICEVIEW">
-						  <option value="">{{ trans('admin/platcog.officeview_microsoft') }}(microsoft)</option>
-						  <option value="rockdoc" @if(env('ROCK_OFFICEVIEW')=='rockdoc')selected @endif>{{ trans('admin/platcog.officeview_rockdoc') }}(rockdoc)</option>
-						  <option value="rockoffice" @if(env('ROCK_OFFICEVIEW')=='rockoffice')selected @endif>{{ trans('admin/platcog.officeview_rockoffice') }}(rockoffice)</option>
-						  <option value="onlyoffice" @if(env('ROCK_OFFICEVIEW')=='onlyoffice')selected @endif>{{ trans('admin/platcog.officeview_onlyoffice') }}(onlyoffice)</option>
-						  <option value="mingdao" @if(env('ROCK_OFFICEVIEW')=='mingdao')selected @endif>{{ trans('admin/platcog.officeview_mingdao') }}(mingdao)</option>
-						  
-						  </select>
-						  <div>{{ trans('admin/platcog.officeview_help') }}{!! c('help')->show('rockview') !!}</div>
+						   <input class="form-control" onblur="this.value=strreplace(this.value)" placeholder="{{ trans('admin/platcog.rockoffice_msg') }}" value="{{ env('ROCKOFFICE_URL') }}"  id="input_rockoffice_url" name="ROCKOFFICE_URL">
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="input_officeedit" class="col-sm-4 control-label"> {{ trans('admin/platcog.officeedit') }}(ROCK_OFFICEDIT)</label>
+						<label for="input_rockoffice_key" class="col-sm-4 control-label"> {{ trans('admin/platcog.rockoffice_key') }}(ROCKOFFICE_KEY)</label>
 						<div class="col-sm-8">
-						  <select class="form-control" id="input_officeview" name="ROCK_OFFICEDIT">
-						  <option value="">{{ trans('admin/platcog.officeview_onlyoffice') }}(onlyoffice)</option>
-						   <option value="rockoffice" @if(env('ROCK_OFFICEDIT')=='rockoffice')selected @endif>{{ trans('admin/platcog.officeview_rockoffice') }}(rockoffice)</option>
-						   <option value="rockdoc" @if(env('ROCK_OFFICEDIT')=='rockdoc')selected @endif>{{ trans('admin/platcog.officeview_rockdoc') }}(rockdoc)</option>  
-						  </select>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="input_onlyoffice" class="col-sm-4 control-label"> {{ trans('admin/platcog.onlyoffice') }}(ROCK_ONLYOFFICE)</label>
-						<div class="col-sm-8">
-						   <input class="form-control" onblur="this.value=strreplace(this.value)" placeholder="{{ trans('admin/platcog.onlyoffice_msg') }}" value="{{ env('ROCK_ONLYOFFICE') }}"  id="input_onlyoffice" name="ROCK_ONLYOFFICE">
-						   <div>{{ trans('admin/platcog.onlyoffice_help') }}{!! c('help')->show('onlyoffice') !!}</div>
+						   <input class="form-control" onblur="this.value=strreplace(this.value)" placeholder="{{ trans('admin/platcog.rockoffice_keymsg') }}" value="{{ env('ROCKOFFICE_KEY') }}"  id="input_rockoffice_key" name="ROCKOFFICE_KEY">
+						   <div>{{ trans('admin/platcog.rockoffice_keymsg') }}{!! c('help')->show('agentkey') !!}</div>
 						</div>
 					</div>
 				</div>

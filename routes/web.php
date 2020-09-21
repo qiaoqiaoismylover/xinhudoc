@@ -25,6 +25,8 @@ Route::get('/fileedit/{ckey}/{filenum}', 'Api\FileoptController@fileedit')->name
 Route::post('/fileeditcall/{ckey}/{filenum}', 'Api\FileoptController@fileeditcall')->name('fileeditcall');
 Route::get('/filesend/{ckey}/{filenum}', 'Api\FileoptController@filesend')->name('filesend');
 
+Route::get('/fileshow/{ckey}/{filenum}', 'Api\FileoptController@fileshow')->name('fileshow');
+
 
 //对外接口时文件预览的
 Route::get('/afileview/{filenum}', 'Api\FileoptController@afileview')->name('afileview');

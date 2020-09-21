@@ -75,6 +75,9 @@ return [
 	*/
     'urly' => env('APP_URLY',''),
 	
+	
+    'urlyu' => env('APP_URLYU'),
+	
 
 	/**
 	|	系统本地地址
