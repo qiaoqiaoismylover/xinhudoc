@@ -46,32 +46,8 @@ return [
 	//文件编辑应用key
 	'rockoffice_key' => env('ROCKOFFICE_KEY', ''),
 	
-	//文件预览和在线编辑设置
-	'fileopt'	=> array(
-		
-		//在线预览，microsoft,rockdoc,rockoffice,onlyoffice,mingdao
-		'view' 		=> env('ROCK_OFFICEVIEW', 'microsoft'),
-		
-		//在线驱动编辑，rockdoc,rockoffice,onlyoffice
-		'edit' 		=> env('ROCK_OFFICEDIT', 'onlyoffice'),
-		
-		//自己安装onlyoffice
-		'onlyoffice'=> array(
-			'url'  => env('ROCK_ONLYOFFICE', 'http://office.rockoa.com')
-		),
-		
-		//用官网的
-		'rockdoc'	=> array(
-			'url'  => 'http://docs.rockoa.com'
-		),
-		
-		//微软的在线预览
-		'microsoft'=> array(
-			'url'  => 'https://view.officeapps.live.com/op/view.aspx'
-		),
-
-		'mingdao'=> array(
-			'url' => 'https://docview.mingdao.com/op/view.aspx'
-		),
-	)
+	//文档预览方式(mingdao,microsoft,rockoffice)
+	'rockoffice_view' => env('ROCKOFFICE_VIEW', ''),
+	
+	
 ];

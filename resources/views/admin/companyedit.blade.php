@@ -95,7 +95,7 @@
 @endsection
 
 @section('script')
-<script src="{{ config('rock.baseurl') }}/?m=upfilejs"></script>
+<script src="/base/upfilejs"></script>
 <script>
 function xuantuan(){
 	if(typeof(upbtn)=='undefined')upbtn = $.rockupfile({

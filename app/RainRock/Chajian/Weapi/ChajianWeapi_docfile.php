@@ -40,7 +40,7 @@ class ChajianWeapi_docfile extends ChajianWeapi
 		$obj 			= Agent_word::select(); //创建个对象
 		$obj->where('cid', $this->companyid);
 		
-		$obj->whereIn('fqid', $allfqid);
+		if(!in_array($atype,['shateall','shatewfx']))$obj->whereIn('fqid', $allfqid);
 		
 		if($fqid>0){
 			$obj->where('fqid', $fqid);

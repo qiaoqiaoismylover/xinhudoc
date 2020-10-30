@@ -81,6 +81,7 @@ class FileoptController extends ApiauthController
 	//内部打开验证信息
 	private function changeckey($ckey)
 	{
+		$this->ckey = $ckey;
 		if(isempt($ckey))return '无效请求';
 		if(!$this->jm->isjm($ckey))return '无效请求1';
 		$cknum	= $this->jm->uncrypt($ckey);
@@ -115,11 +116,14 @@ class FileoptController extends ApiauthController
 		$frs = FiledaModel::where('filenum', $this->jm->base64decode($filenum))->first();
 		if(!$frs)return $this->returntishi('文件记录不存在');
 		$filename = $frs->filename;
+		$otype	  = $request->get('otype');
+		if(isempt($otype))$otype = 1;
 		
 		$barr['filename'] 		= $filename;
 		$barr['companyinfo']  	= $this->companyinfo;
 		$barr['frs']  	= $frs;
 		$barr['ckey']  	= $ckey;
+		$barr['otype']  = $otype;
 		return view('base.fileshow', $barr);
 	}
 	
@@ -177,44 +181,28 @@ class FileoptController extends ApiauthController
 		}else if(contain($offic,','.$fileext.',')){
 			$pdfpath= $frs->pdfpath;
 			if(isempt($pdfpath) || !file_exists(public_path($filepath))){
-				$conf 	= config('rock.fileopt');
-				$viewqd = $conf['view'];
 				
-				//手机端
-				if($ismobile && $viewqd=='rockoffice'){
-					if(env('ROCK_ONLYOFFICE')){
-						$viewqd='onlyoffice';
-					}else{
-						$viewqd='microsoft';
-					}
-				}
-				
-				if(!isset($conf[$viewqd]))return $this->returntishi('没有配置此预览驱动'.$viewqd.'');
-				$qdconf = $conf[$viewqd];
+				$viewqd = config('rock.rockoffice_view');
+				if(!$viewqd)$viewqd = 'microsoft';
 				
 				$url 	= Rock::replaceurl($filepath,1);
+				
 				if($viewqd=='microsoft' || $viewqd=='mingdao'){
+					$surl	= 'https://view.officeapps.live.com/op/view.aspx';
+					if($viewqd=='mingdao')$surl	= 'https://docview.mingdao.com/op/view.aspx';
 					$tplv 	= 'iframe';
-					$url	= $qdconf['url'].'?src='.urlencode($url).'';
-				}
-				if($viewqd=='onlyoffice'){
-					$tplv 	= $viewqd;
-					$url 	= Rock::replaceurl($filepath,2);
-					$barr['onlyurl']  = $qdconf['url'];
-					$barr['filenum']  = $filenum;
-					$barr['appurl']   = config('app.url');
-					$barr['useainfo']  	  	 = $this->useainfo;
-					$barr['documentType']  	 = $this->getdocumentType($fileext);
-					$barr['viewtype'] = $ismobile ? 'mobile' : 'desktop';
+					$url	= $surl.'?src='.urlencode($url).'';
 				}
 				
-				//用官网的
-				if($viewqd=='rockdoc'){
-					
+				//编辑平台
+				if($viewqd=='rockoffice'){
+					$tplv	= 'rockoffice';
+					$barr['frs']  	= $frs;
+					$barr['ckey']  	= $this->ckey;
+					$barr['otype']  = 1;
 				}
-				
+	
 				if($tplv=='')return $this->returntishi('没有开发此预览驱动'.$viewqd.'');
-				
 				$barr['url'] 	= $url;
 				$barr['fileext'] = $fileext;
 			}else{
@@ -229,9 +217,11 @@ class FileoptController extends ApiauthController
 			$barr['url']= '/'.$filepath;	
 		}else{
 			return $this->returntishi('无法在线预览此['.$fileext.']文件类型，请使用下载功能');
+		}	
+		if($tplv!=''){
+			$tplv = ($tplv=='rockoffice') ? 'fileshow' : 'fileview_'.$tplv.'';
+			return view('base.'.$tplv.'', $barr);
 		}
-		
-		if($tplv!='')return view('base.fileview_'.$tplv.'', $barr);
 	}
 	
 	/**

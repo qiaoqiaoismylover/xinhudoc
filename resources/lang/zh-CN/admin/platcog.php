@@ -78,11 +78,11 @@ return [
 	'officeview_help'	=> '这几个是什么区别？更多查看',
 	'officeedit'	=> '文档编辑',
 	
-	'officeview_microsoft'		=> '使用微软提供在线预览(需在外网上)',
-	'officeview_mingdao'		=> '使用明道提供在线预览(需在外网上)',
+	'officeview_microsoft'		=> '使用微软提供在线预览(需外网域名80端口)',
+	'officeview_mingdao'		=> '使用明道提供在线预览(需外网域名80端口)',
 	'officeview_rockdoc'		=> '信呼官网提供(需在外网上)',
 	'officeview_onlyoffice'		=> '自己安装onlyoffice服务',
-	'officeview_rockoffice'		=> '用户电脑自己安装插件',
+	'officeview_rockoffice'		=> '用信呼文档编辑平台，需设置预览编辑key',
 	
 	'onlyoffice'	=> '自己部署onlyoffice服务地址',
 	'onlyoffice_help'	=> '如何部署onlyoffice服务？请看',

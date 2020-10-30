@@ -156,6 +156,19 @@
 				
 				<div role="tabpanel" class="tab-pane" id="tab6">
 					
+					
+					<div class="form-group">
+						<label for="input_officeview" class="col-sm-4 control-label"> {{ trans('admin/platcog.officeview') }}(ROCKOFFICE_VIEW)</label>
+						<div class="col-sm-8">
+						  <select class="form-control" id="input_officeview" name="ROCKOFFICE_VIEW">
+						  <option value="">{{ trans('admin/platcog.officeview_microsoft') }}(microsoft)</option>
+						  <option value="mingdao" @if(env('ROCKOFFICE_VIEW')=='mingdao')selected @endif>{{ trans('admin/platcog.officeview_mingdao') }}(mingdao)</option>
+						  <option value="rockoffice" @if(env('ROCKOFFICE_VIEW')=='rockoffice')selected @endif>{{ trans('admin/platcog.officeview_rockoffice') }}(rockoffice)</option>
+						  </select>
+						</div>
+					</div>
+					
+					
 					<div class="form-group">
 						<label for="input_rockoffice_url" class="col-sm-4 control-label"> {{ trans('admin/platcog.rockoffice_url') }}(ROCKOFFICE_URL)</label>
 						<div class="col-sm-8">

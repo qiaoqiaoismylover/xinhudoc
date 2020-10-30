@@ -7,7 +7,7 @@
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/js/js.js"></script>
 <script>
-var id = '{{ $frs->id }}',otype=js.request('otype'),callb=js.request('callb');
+var id = '{{ $frs->id }}',otype={{ $otype }},callb=js.request('callb');
 function initbody(){
 	var url = '/api/we/docfile_sendedit/{{ $companyinfo->num }}/?id='+id+'&otype='+otype+'&ckey={{ $ckey }}&callb='+callb+'';
 	$.ajax({

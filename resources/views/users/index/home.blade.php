@@ -205,12 +205,7 @@ $(document).ready(function(){
 					js.msgerror(msg);
 				});
 			}else{
-				if(officelx.indexOf(','+fext+',')>-1){
-					var url = this.getshowurl('show', fnum);
-					url+='?otype=1';
-				}else{
-					var url = this.getshowurl('view', fnum);
-				}
+				var url = this.getshowurl('view', fnum);
 				window.open(url);
 			}
 		},
